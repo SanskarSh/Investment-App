@@ -38,7 +38,6 @@
 //   }
 // }
 
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -63,9 +62,11 @@ class FirebaseAuthDataSourceImpl implements FirebaseAuthDataSource {
       }
 
       // Get authentication tokens
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
       if (googleAuth.idToken == null || googleAuth.accessToken == null) {
         // Missing authentication tokens
+        print('Missing Google ID Token or Access Token');
         return null;
       }
 
@@ -74,7 +75,8 @@ class FirebaseAuthDataSourceImpl implements FirebaseAuthDataSource {
         idToken: googleAuth.idToken!,
         accessToken: googleAuth.accessToken!,
       );
-      final userCredential = await firebaseAuth.signInWithCredential(credential);
+      final userCredential =
+          await firebaseAuth.signInWithCredential(credential);
 
       return userCredential.user;
     } catch (e) {

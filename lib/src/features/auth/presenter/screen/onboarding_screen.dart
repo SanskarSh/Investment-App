@@ -175,67 +175,68 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            // BlocBuilder<AuthBloc, AuthState>(
-            // builder: (context, state) {
-            // if (state is AuthError) {
-            //   ScaffoldMessenger.of(context).showSnackBar(
-            //     SnackBar(
-            //       content: Text(state.message),
-            //     ),
-            //   );
-            // }
-            // if (state is Authenticated) {
-            //   return const Placeholder();
-            // } else {
-            //   return
-            ElevatedButton(
-              style: ButtonStyle(
-                minimumSize: WidgetStateProperty.all(
-                  const Size(double.infinity, 70),
-                ),
-                backgroundColor: WidgetStateProperty.all(
-                  Theme.of(context).colorScheme.primary,
-                ),
-                shape: WidgetStateProperty.all(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                ),
-              ),
-              onPressed: () {
-                BlocProvider.of<AuthBloc>(context).add(SignInRequested());
-              },
-              child: BlocBuilder<InternetCubit, InternetState>(
-                builder: (context, state) {
-                  if (state.isConnected) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(
-                          'SignIn With Google',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                            fontSize: 20.0,
-                          ),
-                        ),
-                        const Icon(
-                          Ionicons.logo_google,
-                          color: Colors.white,
-                        )
-                      ],
-                    );
-                  } else {
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
+            BlocBuilder<AuthBloc, AuthState>(
+              builder: (context, state) {
+                if (state is AuthError) {
+                  print(state.message);
+                  //   ScaffoldMessenger.of(context).showSnackBar(
+                  //     SnackBar(
+                  //       content: Text(state.message),
+                  //     ),
+                  //   );
+                }
+                if (state is Authenticated) {
+                  return const Placeholder();
+                } else {
+                  return ElevatedButton(
+                    style: ButtonStyle(
+                      minimumSize: WidgetStateProperty.all(
+                        const Size(double.infinity, 70),
                       ),
-                    );
-                  }
-                },
-              ),
-              // );
-              // }
-              // },
+                      backgroundColor: WidgetStateProperty.all(
+                        Theme.of(context).colorScheme.primary,
+                      ),
+                      shape: WidgetStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      BlocProvider.of<AuthBloc>(context).add(SignInRequested());
+                    },
+                    child: BlocBuilder<InternetCubit, InternetState>(
+                      builder: (context, state) {
+                        if (state.isConnected) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text(
+                                'SignIn With Google',
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                  fontSize: 20.0,
+                                ),
+                              ),
+                              const Icon(
+                                Ionicons.logo_google,
+                                color: Colors.white,
+                              )
+                            ],
+                          );
+                        } else {
+                          return const Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  );
+                }
+              },
             ),
             SmoothPageIndicator(
               effect: WormEffect(

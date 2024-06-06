@@ -13,12 +13,12 @@ final si = GetIt.instance;
 
 Future<void> initializeDependencies() async {
   // Register FirebaseAuth and GoogleSignIn
-  // si.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
-  // si.registerLazySingleton<GoogleSignIn>(() => GoogleSignIn());
+  si.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
+  si.registerLazySingleton<GoogleSignIn>(() => GoogleSignIn());
 
   // Data sources
-  // si.registerLazySingleton<FirebaseAuthDataSource>(
-  // () => FirebaseAuthDataSourceImpl(si()));
+  si.registerLazySingleton<FirebaseAuthDataSource>(
+  () => FirebaseAuthDataSourceImpl(si()));
 
   // Repositories
   si.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(si()));
