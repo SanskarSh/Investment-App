@@ -44,13 +44,14 @@ dependencies:
   bloc: ^8.1.4
   internet_connection_checker_plus: ^2.4.1
   google_sign_in: ^6.2.1
+  cloud_firestore: ^5.0.0
+  multi_bloc_builder: ^1.0.0
+  top_snackbar_flutter: ^3.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  cloud_firestore: ^5.0.0
   shared_preferences: ^2.2.3
-  multi_bloc_builder: ^1.0.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

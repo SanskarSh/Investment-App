@@ -58,7 +58,7 @@ packages:
     source: hosted
     version: "1.1.1"
   cloud_firestore:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: cloud_firestore
       sha256: f5b12f4e2e3f6b38f86a88225e564ed7f7d141b85a237576fa88952e662e8ef1
@@ -385,7 +385,7 @@ packages:
     source: hosted
     version: "1.12.0"
   multi_bloc_builder:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: multi_bloc_builder
       sha256: "2993c8e207b165635711f2e573c3346d73543037bd0a028c99f9e59d27fc2b80"
@@ -589,6 +589,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.0"
+  top_snackbar_flutter:
+    dependency: "direct main"
+    description:
+      name: top_snackbar_flutter
+      sha256: "22d14664a13db6ac714934c3382bd8d4daa57fb888a672f922df71981c5a5cb2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0"
   typed_data:
     dependency: transitive
     description:

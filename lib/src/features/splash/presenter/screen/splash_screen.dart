@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:investment_app/src/config/routes/app_route_const.dart';
+import 'package:investment_app/src/features/auth/presenter/screen/onboarding_screen.dart';
+import 'package:investment_app/src/features/home/presenter/screen/home_screen.dart';
+import 'package:investment_app/src/features/register/presenter/screen/registration_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -10,24 +13,65 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-    _checkStatus();
-  }
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<void> _checkStatus() async {
-    await Future.delayed(const Duration(seconds: 2));
-    GoRouter.of(context).pushNamed(RouteNames.onboarding);
-    // context.go('/splash');
+  Future<bool> _userHasData() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      DocumentSnapshot userDoc =
+          await _firestore.collection('User').doc(user.uid).get();
+      return userDoc.exists;
+    }
+    return false;
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text("Splash Screen"),
+    return Scaffold(
+      body: FutureBuilder(
+        future: Future.delayed(const Duration(seconds: 3)),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return StreamBuilder<User?>(
+              stream: FirebaseAuth.instance.authStateChanges(),
+              builder: (context, authSnapshot) {
+                if (authSnapshot.connectionState == ConnectionState.active) {
+                  if (authSnapshot.hasData) {
+                    return FutureBuilder<bool>(
+                      future: _userHasData(),
+                      builder: (context, firestoreSnapshot) {
+                        if (firestoreSnapshot.connectionState ==
+                            ConnectionState.done) {
+                          if (firestoreSnapshot.data == true) {
+                            return const HomeScreen();
+                          } else {
+                            return const RegistrationScreen();
+                          }
+                        } else {
+                          return buildBody();
+                        }
+                      },
+                    );
+                  } else {
+                    return const OnboardingScreen();
+                  }
+                } else {
+                  return buildBody();
+                }
+              },
+            );
+          } else {
+            return buildBody();
+          }
+        },
       ),
+    );
+  }
+
+  Center buildBody() {
+    return const Center(
+      child: CircularProgressIndicator(),
     );
   }
 }

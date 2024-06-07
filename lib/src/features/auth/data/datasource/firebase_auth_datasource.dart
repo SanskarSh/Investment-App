@@ -1,56 +1,71 @@
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:google_sign_in/google_sign_in.dart';
-
-// abstract class FirebaseAuthDataSource {
-//   Future<User?> signInWithGoogle();
-//   Future<void> signOut();
-// }
-
-// class FirebaseAuthDataSourceImpl implements FirebaseAuthDataSource {
-//   final FirebaseAuth firebaseAuth;
-
-//   FirebaseAuthDataSourceImpl(this.firebaseAuth);
-
-//   @override
-//   Future<User?> signInWithGoogle() async {
-//     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-//     final GoogleSignInAuthentication? googleAuth =
-//         await googleUser?.authentication;
-
-//     if (googleAuth?.idToken != null && googleAuth?.accessToken != null) {
-//       final credential = GoogleAuthProvider.credential(
-//         idToken: googleAuth!.idToken,
-//         accessToken: googleAuth.accessToken,
-//       );
-
-//       final userCredential =
-//           await firebaseAuth.signInWithCredential(credential);
-//       return userCredential.user;
-//     }
-
-//     return null;
-//   }
-
-//   @override
-//   Future<void> signOut() async {
-//     await firebaseAuth.signOut();
-//     await GoogleSignIn().signOut();
-//   }
-// }
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 abstract class FirebaseAuthDataSource {
   Future<User?> signInWithGoogle();
+  Future<UserCredential> signInWithEmailPassword(String email, String password);
+  Future<UserCredential> signUpWithEmailPassword(String email, String password);
   Future<void> signOut();
 }
 
-class FirebaseAuthDataSourceImpl implements FirebaseAuthDataSource {
-  final FirebaseAuth firebaseAuth;
+class AuthServices implements FirebaseAuthDataSource {
+  // instance of Auth & Firestore
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  FirebaseAuthDataSourceImpl(this.firebaseAuth);
+  // get current user
+  User? get currentUser => _auth.currentUser;
 
+  // Sign in
+  @override
+  Future<UserCredential> signInWithEmailPassword(
+      String email, String password) async {
+    try {
+      // sign in user
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      throw Exception(e.code);
+    }
+  }
+
+  // Sign up
+  @override
+  Future<UserCredential> signUpWithEmailPassword(
+      String email, String password) async {
+    try {
+      // create user
+      final UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      String message = "";
+      switch (e.code) {
+        case 'weak-password':
+          message =
+              'The password is too weak. Please choose a stronger password.';
+          break;
+        case 'email-already-in-use':
+          message = 'The email address is already in use.';
+          break;
+        // Handle other potential error codes
+        default:
+          message = 'An error occurred during registration. Please try again.';
+      }
+      throw Exception(message);
+    }
+  }
+
+  // Sign in with Google
   @override
   Future<User?> signInWithGoogle() async {
     try {
@@ -75,28 +90,53 @@ class FirebaseAuthDataSourceImpl implements FirebaseAuthDataSource {
         idToken: googleAuth.idToken!,
         accessToken: googleAuth.accessToken!,
       );
-      final userCredential =
-          await firebaseAuth.signInWithCredential(credential);
+      final userCredential = await _auth.signInWithCredential(credential);
+
+      // save user info if it doesn't exist
+      _firestore.collection("User").doc(userCredential.user!.uid).set(
+        {
+          "uid": userCredential.user!.uid,
+          "email": userCredential.user!.email,
+        },
+      );
 
       return userCredential.user;
     } catch (e) {
       // Error occurred during sign-in
-      print('Error signing in with Google: $e');
-      return null;
+      throw Exception(getErrorString(e.toString()));
     }
   }
 
+  // Sign out
   @override
   Future<void> signOut() async {
     try {
       // Sign out from Firebase
-      await firebaseAuth.signOut();
+      await _auth.signOut();
 
       // Sign out from Google
       await GoogleSignIn().signOut();
     } catch (e) {
       // Error occurred during sign-out
-      print('Error signing out: $e');
+      throw Exception(getErrorString(e.toString()));
+    }
+  }
+
+  // errors
+  String? getErrorString(String code) {
+    switch (code) {
+      case 'email-already-in-use':
+        return 'The email address is already in use.';
+      case 'invalid-email':
+        return 'The email address is not valid.';
+      case 'weak-password':
+        return 'The password is too weak.';
+      case 'user-not-found':
+        return 'No user found for that email.';
+      case 'wrong-password':
+        return 'Wrong password provided for that user.';
+      default:
+        return 'An error occurred. Please try again.';
     }
   }
 }

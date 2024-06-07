@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:investment_app/src/core/service/connectivity/cubit/internet_cubit.dart';
-import 'package:investment_app/src/features/auth/presenter/bloc/auth_bloc.dart';
+import 'package:investment_app/src/features/auth/presenter/widget/page_indicator_and_sign_in.dart';
 import 'package:investment_app/src/features/auth/presenter/widget/page_widget.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -69,35 +66,35 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 flex: 3,
                 child: Stack(
                   children: [
-                    buildPageView(),
+                    PageView.builder(
+                      onPageChanged: (index) {
+                        setState(() {
+                          currentPage = index;
+                        });
+                      },
+                      controller: pageController,
+                      itemCount: onboardingPages.length,
+                      itemBuilder: (context, index) {
+                        return PageViewWidget(
+                          color: onboardingPages[index]['color'],
+                          title: onboardingPages[index]['title'],
+                          description: onboardingPages[index]['description'],
+                        );
+                      },
+                    ),
                     buildPageNavigationButtons(context)
                   ],
                 ),
               ),
-              buildPageIndicator(context)
+              PageIndicatorAndSignIn(
+                onboardingPages: onboardingPages,
+                currentPage: currentPage,
+                pageController: pageController,
+              )
             ],
           ),
         ),
       ),
-    );
-  }
-
-  PageView buildPageView() {
-    return PageView.builder(
-      onPageChanged: (index) {
-        setState(() {
-          currentPage = index;
-        });
-      },
-      controller: pageController,
-      itemCount: onboardingPages.length,
-      itemBuilder: (context, index) {
-        return PageViewWidget(
-          color: onboardingPages[index]['color'],
-          title: onboardingPages[index]['title'],
-          description: onboardingPages[index]['description'],
-        );
-      },
     );
   }
 
@@ -155,103 +152,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
               )
             ],
-          ],
-        ),
-      ),
-    );
-  }
-
-  Expanded buildPageIndicator(BuildContext context) {
-    return Expanded(
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 100),
-        curve: Curves.easeInOutCubicEmphasized,
-        margin: const EdgeInsets.only(top: 20.0),
-        padding: const EdgeInsets.all(20.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.0),
-          color: onboardingPages[currentPage]['color'],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            BlocBuilder<AuthBloc, AuthState>(
-              builder: (context, state) {
-                if (state is AuthError) {
-                  print(state.message);
-                  //   ScaffoldMessenger.of(context).showSnackBar(
-                  //     SnackBar(
-                  //       content: Text(state.message),
-                  //     ),
-                  //   );
-                }
-                if (state is Authenticated) {
-                  return const Placeholder();
-                } else {
-                  return ElevatedButton(
-                    style: ButtonStyle(
-                      minimumSize: WidgetStateProperty.all(
-                        const Size(double.infinity, 70),
-                      ),
-                      backgroundColor: WidgetStateProperty.all(
-                        Theme.of(context).colorScheme.primary,
-                      ),
-                      shape: WidgetStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                      ),
-                    ),
-                    onPressed: () {
-                      BlocProvider.of<AuthBloc>(context).add(SignInRequested());
-                    },
-                    child: BlocBuilder<InternetCubit, InternetState>(
-                      builder: (context, state) {
-                        if (state.isConnected) {
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Text(
-                                'SignIn With Google',
-                                style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                  fontSize: 20.0,
-                                ),
-                              ),
-                              const Icon(
-                                Ionicons.logo_google,
-                                color: Colors.white,
-                              )
-                            ],
-                          );
-                        } else {
-                          return const Center(
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                  );
-                }
-              },
-            ),
-            SmoothPageIndicator(
-              effect: WormEffect(
-                radius: 8.0,
-                spacing: 10.0,
-                dotWidth: 10.0,
-                dotHeight: 10.0,
-                strokeWidth: 0.0,
-                dotColor: Theme.of(context).colorScheme.primary.withOpacity(.4),
-                type: WormType.thin,
-                activeDotColor: Theme.of(context).colorScheme.primary,
-              ),
-              controller: pageController,
-              count: onboardingPages.length,
-            ),
           ],
         ),
       ),
