@@ -4,10 +4,10 @@ class AppColors {
   final BuildContext context;
 
   // Light Theme Colors
-  static const Color surface = Color.fromRGBO(255, 255, 255, 1);
+  static const Color surface = Color.fromRGBO(248, 237, 226, 1);
   static const Color primary = Color.fromRGBO(0, 0, 0, 1);
-  static const Color onPrimary = Color.fromRGBO(255, 255, 255, 1);
-  static const Color secondary = Color.fromRGBO(121, 230, 226, 1);
+  static const Color onPrimary = Color.fromRGBO(255, 252, 252, 1);
+  static const Color secondary = Color.fromRGBO(236, 185, 155, 1);
   static const Color tertiary = Color.fromRGBO(160, 157, 141, 1);
 
   AppColors({required this.context});

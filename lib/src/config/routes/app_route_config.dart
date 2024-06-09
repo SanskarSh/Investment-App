@@ -24,7 +24,7 @@ class AppRoute {
         GoRoute(
           name: RouteNames.home,
           path: '/home',
-          builder: (context, state) => const HomeScreen(),
+          builder: (context, state) => HomeScreen(),
         ),
       ],
     );

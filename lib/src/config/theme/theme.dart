@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:investment_app/src/core/constant/color.dart';
 
 class MyTheme {
@@ -10,7 +11,7 @@ class MyTheme {
       secondary: AppColors.secondary,
       tertiary: AppColors.tertiary,
     ),
-    // textTheme: buildTextTheme(),
+    textTheme: buildTextTheme(),
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -21,14 +22,24 @@ class MyTheme {
       secondary: AppColors.secondary,
       tertiary: AppColors.tertiary,
     ),
-    // textTheme: buildTextTheme(),
+    textTheme: buildTextTheme(),
   );
 
-  // static TextTheme buildTextTheme() {
-  //   return TextTheme(
-  //     displayLarge:,
-  //     displayMedium:,
-  //     displaySmall:
-  //   );
-  // }
+  static TextTheme buildTextTheme() {
+    return TextTheme(
+      displayLarge: GoogleFonts.playfairDisplay(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        letterSpacing: 1.2,
+      ),
+      displayMedium: GoogleFonts.playfairDisplay(
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
+      displaySmall: GoogleFonts.playfairDisplay(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
 }

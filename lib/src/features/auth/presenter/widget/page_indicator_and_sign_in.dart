@@ -202,18 +202,23 @@ class _PageIndicatorAndSignInState extends State<PageIndicatorAndSignIn> {
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
+                                const Icon(
+                                  Ionicons.logo_google,
+                                  color: Colors.white,
+                                ),
+                                Container(
+                                  height: 30.0,
+                                  width: 1.0,
+                                  color: Colors.white,
+                                ),
                                 Text(
-                                  'SignIn With Google',
+                                  'Sign in with Google',
                                   style: TextStyle(
                                     color:
                                         Theme.of(context).colorScheme.onPrimary,
                                     fontSize: 18.0,
                                   ),
                                 ),
-                                const Icon(
-                                  Ionicons.logo_google,
-                                  color: Colors.white,
-                                )
                               ],
                             );
                           } else {
@@ -231,7 +236,7 @@ class _PageIndicatorAndSignInState extends State<PageIndicatorAndSignIn> {
                     GestureDetector(
                       onTap: () => _showLoginDialog(context),
                       child: Text(
-                        "username and password",
+                        "login with email",
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
                           fontSize: 16.0,

@@ -44,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         if (firestoreSnapshot.connectionState ==
                             ConnectionState.done) {
                           if (firestoreSnapshot.data == true) {
-                            return const HomeScreen();
+                            return HomeScreen();
                           } else {
                             return const RegistrationScreen();
                           }
