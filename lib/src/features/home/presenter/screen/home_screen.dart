@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:investment_app/src/features/blog_feed/presenter/screen/blog_screen.dart';
 import 'package:investment_app/src/features/home/presenter/widget/navigation_button.dart';
+import 'package:investment_app/src/features/home/presenter/widget/qr_scanner.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:investment_app/src/features/auth/data/datasource/firebase_auth_datasource.dart';
 
@@ -20,11 +21,21 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       extendBody: true,
       backgroundColor: Theme.of(context).colorScheme.surface,
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniCenterDocked,
       floatingActionButton: FloatingActionButton(
+        elevation: 0.0,
+        shape: const CircleBorder(),
         backgroundColor: Theme.of(context).colorScheme.secondary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        onPressed: () {},
-        child: const Icon(Ionicons.chatbox),
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            builder: (context) => const QRScannerSheet(),
+          );
+        },
+        child: const Icon(Ionicons.qr_code),
       ),
       body: PageView(
         controller: pageController,
@@ -40,6 +51,7 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: Container(
+        padding: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
@@ -55,9 +67,9 @@ class HomeScreen extends StatelessWidget {
             topRight: Radius.circular(16),
           ),
         ),
-        height: 100,
+        height: 90,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             NavigationButton(
               pageController: pageController,
@@ -87,6 +99,7 @@ class HomeScreen extends StatelessWidget {
                 logoutSelected.value = false;
               },
             ),
+            const SizedBox(),
             NavigationButton(
               pageController: pageController,
               tooltip: "Profile",
