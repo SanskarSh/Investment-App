@@ -77,9 +77,9 @@ class _BlogDetailsSheetState extends State<BlogDetailsSheet> {
     flutterTts.setStartHandler(() {
       // When TTS playback starts, set isPlayingNotifier to true.
       isPlayingNotifier.value = true;
-      flutterTts.setVolume(1.0);
-      flutterTts.setSpeechRate(0.4);
-      flutterTts.setPitch(.4);
+      flutterTts.setVolume(.9);
+      flutterTts.setSpeechRate(0.3);
+      flutterTts.setPitch(.5);
     });
 
     flutterTts.setProgressHandler((text, start, end, word) {

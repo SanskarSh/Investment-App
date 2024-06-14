@@ -1,7 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:investment_app/src/config/routes/app_route_const.dart';
 import 'package:investment_app/src/features/auth/presenter/screen/onboarding_screen.dart';
-import 'package:investment_app/src/features/home/presenter/screen/home_screen.dart';
+import 'package:investment_app/src/features/entry/presenter/screen/entry_screen.dart';
 import 'package:investment_app/src/features/splash/presenter/screen/splash_screen.dart';
 
 class AppRoute {
@@ -24,7 +24,7 @@ class AppRoute {
         GoRoute(
           name: RouteNames.home,
           path: '/home',
-          builder: (context, state) => HomeScreen(),
+          builder: (context, state) => EntryScreen(),
         ),
       ],
     );
