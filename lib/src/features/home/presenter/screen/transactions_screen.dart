@@ -4,7 +4,13 @@ import 'package:ionicons/ionicons.dart';
 
 class TransactionsScreen extends StatelessWidget {
   final IconData icon;
-  const TransactionsScreen({super.key, required this.icon});
+  final Color color;
+  final String title;
+  const TransactionsScreen(
+      {super.key,
+      required this.icon,
+      required this.color,
+      required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -15,30 +21,37 @@ class TransactionsScreen extends StatelessWidget {
         child: Scaffold(
           backgroundColor: Theme.of(context).colorScheme.surface,
           appBar: AppBar(
-              elevation: 0,
-              backgroundColor: Theme.of(context).colorScheme.surface,
-              foregroundColor: Colors.transparent,
-              surfaceTintColor: Colors.transparent,
-              shadowColor: Colors.transparent,
-              leading: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(
-                  Ionicons.chevron_back,
-                  size: 24,
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
+            elevation: 0,
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            foregroundColor: Colors.transparent,
+            surfaceTintColor: Colors.transparent,
+            shadowColor: Colors.transparent,
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(
+                Ionicons.chevron_back,
+                size: 24,
+                color: Theme.of(context).colorScheme.secondary,
               ),
-              title: Text(
-                "-\$ 5480.00",
-                style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-              )),
+            ),
+            title: Text(
+              "-\$ 5480.00",
+              style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+            ),
+          ),
           body: Column(
             children: [
-              const LineChartSample2(),
+              const Card(
+                margin: EdgeInsets.all(16),
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: LineChartSample2(),
+                ),
+              ),
               const SizedBox(height: 32),
               Container(
                 alignment: Alignment.centerLeft,
@@ -46,7 +59,7 @@ class TransactionsScreen extends StatelessWidget {
                 child: Text(
                   "Transactions",
                   style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.secondary,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                 ),
               ),
@@ -59,21 +72,21 @@ class TransactionsScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16),
                       child: Column(
                         children: [
-                          buildTransaction(context),
+                          buildTransaction(context, icon, color, title),
                           const SizedBox(height: 4),
-                          buildTransaction(context),
+                          buildTransaction(context, icon, color, title),
                           const SizedBox(height: 4),
-                          buildTransaction(context),
+                          buildTransaction(context, icon, color, title),
                           const SizedBox(height: 4),
-                          buildTransaction(context),
+                          buildTransaction(context, icon, color, title),
                           const SizedBox(height: 4),
-                          buildTransaction(context),
+                          buildTransaction(context, icon, color, title),
                           const SizedBox(height: 4),
-                          buildTransaction(context),
+                          buildTransaction(context, icon, color, title),
                           const SizedBox(height: 4),
-                          buildTransaction(context),
+                          buildTransaction(context, icon, color, title),
                           const SizedBox(height: 4),
-                          buildTransaction(context),
+                          buildTransaction(context, icon, color, title),
                         ],
                       ),
                     ),
@@ -88,47 +101,56 @@ class TransactionsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildTransaction(BuildContext context) {
+  Widget buildTransaction(
+      BuildContext context, IconData icon, Color color, String title) {
     return Container(
-      // margin: const EdgeInsets.only(bottom: 8),
       color: Theme.of(context).colorScheme.onPrimary,
+      margin: const EdgeInsets.only(bottom: 8),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
           children: [
-            CircleAvatar(
-              backgroundColor: Theme.of(context).colorScheme.secondary,
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: color.withOpacity(.1),
+              ),
               child: Icon(
                 icon,
-                color: Theme.of(context).colorScheme.onPrimary,
+                color: color,
               ),
             ),
             const SizedBox(width: 16),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Dribble Pro",
-                  style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                ),
-                Text(
-                  "18 Sep 2021",
-                  style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .primary
-                            .withOpacity(.5),
-                      ),
-                ),
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                  ),
+                  Text(
+                    "18 Sep 2021",
+                    style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                          fontWeight: FontWeight.w200,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(.3),
+                        ),
+                  ),
+                ],
+              ),
             ),
-            const Spacer(),
             Text(
-              "-\$ 500",
+              "- ₹500",
               style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                    color: Colors.blue.shade900,
+                    fontWeight: FontWeight.w600,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
             ),
           ],
@@ -246,7 +268,7 @@ class _LineChartSample2State extends State<LineChartSample2> {
         ),
         leftTitles: AxisTitles(
           sideTitles: SideTitles(
-            showTitles: false,
+            showTitles: true,
             interval: 1,
             getTitlesWidget: leftTitleWidgets,
             reservedSize: 42,

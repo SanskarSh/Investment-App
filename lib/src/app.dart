@@ -24,8 +24,8 @@ class MyApp extends StatelessWidget {
           create: (context) => si<AuthBloc>(),
         ),
       ],
-      child: ListenableBuilder(
-        listenable: controller,
+      child: AnimatedBuilder(
+        animation: controller,
         builder: (BuildContext context, Widget? child) {
           return MaterialApp.router(
             themeMode: controller.themeMode,

@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -37,25 +38,46 @@ class _QRScannerSheetState extends State<QRScannerSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Expanded(
-          flex: 5,
-          child: QRView(
-            key: qrKey,
-            onQRViewCreated: _onQRViewCreated,
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        children: <Widget>[
+          const SizedBox(height: 24),
+          Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: Icon(Ionicons.close,
+                    color: Theme.of(context).colorScheme.onSurface),
+              ),
+            ],
           ),
-        ),
-        Expanded(
-          flex: 1,
-          child: Center(
-            child: (result != null)
-                ? Text(
-                    'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
-                : const Text('Scan a code'),
+          const Spacer(),
+          Container(
+            width: 250,
+            height: 250,
+            decoration: BoxDecoration(
+              border: Border.all(color: Theme.of(context).colorScheme.primary),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: QRView(
+              key: qrKey,
+              onQRViewCreated: _onQRViewCreated,
+            ),
           ),
-        )
-      ],
+          const Spacer(),
+          Expanded(
+            child: Center(
+              child: (result != null)
+                  ? Text(
+                      'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
+                  : const Text('Scan a code'),
+            ),
+          )
+        ],
+      ),
     );
   }
 

@@ -22,6 +22,8 @@ class CategoryCard extends StatelessWidget {
           context: context,
           builder: (context) => TransactionsScreen(
             icon: icon,
+            color: color,
+            title: title,
           ),
         );
       },
@@ -55,19 +57,22 @@ class CategoryCard extends StatelessWidget {
                     end: Alignment.centerRight,
                   ),
                 ),
-                child: Center(
+                child: SizedBox(
+                  width: double.infinity,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Flexible(
                         child: Text(
+                          maxLines: 2,
                           title,
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.onPrimary,
                             fontSize: 20,
                             fontWeight: FontWeight.w900,
                           ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       Text(

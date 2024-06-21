@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:investment_app/src/config/controller/theme_controller.dart';
+import 'package:investment_app/src/config/service/theme_services.dart';
 import 'package:investment_app/src/core/service/connectivity/cubit/internet_cubit.dart';
 import 'package:investment_app/src/features/auth/data/datasource/firebase_auth_datasource.dart';
 import 'package:investment_app/src/features/auth/data/repository/auth_repository_impl.dart';
@@ -12,6 +14,11 @@ import 'package:investment_app/src/features/auth/presenter/bloc/auth_bloc.dart';
 final si = GetIt.instance;
 
 Future<void> initializeDependencies() async {
+  si.registerLazySingleton<SettingService>(() => SettingService());
+  si.registerLazySingleton<SettingsController>(
+    () => SettingsController(si<SettingService>())..loadSettings(),
+  );
+
   // Register FirebaseAuth and GoogleSignIn
   si.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
   si.registerLazySingleton<GoogleSignIn>(() => GoogleSignIn());

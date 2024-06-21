@@ -1018,6 +1018,8 @@ PODS:
     - nanopb (< 2.30911.0, >= 2.30908.0)
   - FirebaseSharedSwift (10.27.0)
   - Flutter (1.0.0)
+  - flutter_keyboard_visibility (0.0.1):
+    - Flutter
   - flutter_tts (0.0.1):
     - Flutter
   - google_sign_in_ios (0.0.1):
@@ -1150,6 +1152,8 @@ PODS:
     - FlutterMacOS
   - permission_handler_apple (9.3.0):
     - Flutter
+  - pointer_interceptor_ios (0.0.1):
+    - Flutter
   - PromisesObjC (2.4.0)
   - qr_code_scanner (0.2.0):
     - Flutter
@@ -1167,10 +1171,12 @@ DEPENDENCIES:
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - Flutter (from `Flutter`)
+  - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
   - flutter_tts (from `.symlinks/plugins/flutter_tts/ios`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/darwin`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
+  - pointer_interceptor_ios (from `.symlinks/plugins/pointer_interceptor_ios/ios`)
   - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
@@ -1212,6 +1218,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_core/ios"
   Flutter:
     :path: Flutter
+  flutter_keyboard_visibility:
+    :path: ".symlinks/plugins/flutter_keyboard_visibility/ios"
   flutter_tts:
     :path: ".symlinks/plugins/flutter_tts/ios"
   google_sign_in_ios:
@@ -1220,6 +1228,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
+  pointer_interceptor_ios:
+    :path: ".symlinks/plugins/pointer_interceptor_ios/ios"
   qr_code_scanner:
     :path: ".symlinks/plugins/qr_code_scanner/ios"
   shared_preferences_foundation:
@@ -1245,6 +1255,7 @@ SPEC CHECKSUMS:
   FirebaseFirestoreInternal: 7ba63f170a554ae49392da44f9430e5b7915a7ff
   FirebaseSharedSwift: a03fe7a59ee646fef71099a887f774fe25d745b8
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
   flutter_tts: 0f492aab6accf87059b72354fcb4ba934304771d
   google_sign_in_ios: 07375bfbf2620bc93a602c0e27160d6afc6ead38
   GoogleSignIn: d4281ab6cf21542b1cfaff85c191f230b399d2db
@@ -1258,6 +1269,7 @@ SPEC CHECKSUMS:
   nanopb: 438bc412db1928dac798aa6fd75726007be04262
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
+  pointer_interceptor_ios: 508241697ff0947f853c061945a8b822463947c1
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21

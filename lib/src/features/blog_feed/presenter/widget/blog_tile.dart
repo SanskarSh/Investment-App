@@ -27,9 +27,6 @@ class BlogTile extends StatelessWidget {
             margin: const EdgeInsets.only(top: 8),
             height: 110,
             width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-            ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -44,10 +41,7 @@ class BlogTile extends StatelessWidget {
                             Theme.of(context).textTheme.displayMedium?.copyWith(
                                   height: 1.2,
                                   fontWeight: FontWeight.w600,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .withOpacity(.7),
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -56,6 +50,7 @@ class BlogTile extends StatelessWidget {
                         description,
                         style:
                             Theme.of(context).textTheme.displaySmall?.copyWith(
+                                  fontWeight: FontWeight.w400,
                                   color: Theme.of(context)
                                       .colorScheme
                                       .primary
@@ -69,7 +64,10 @@ class BlogTile extends StatelessWidget {
                         children: [
                           Icon(
                             Icons.calendar_today,
-                            color: Theme.of(context).colorScheme.secondary,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(.5),
                             size: 16,
                           ),
                           Text(
@@ -78,8 +76,10 @@ class BlogTile extends StatelessWidget {
                                 .textTheme
                                 .displaySmall
                                 ?.copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primary
+                                      .withOpacity(.5),
                                 ),
                           ),
                         ],

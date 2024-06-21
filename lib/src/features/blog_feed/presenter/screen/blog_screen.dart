@@ -73,7 +73,8 @@ class BlogScreen extends StatelessWidget {
           children: [
             TabBar(
               labelColor: Theme.of(context).colorScheme.primary,
-              unselectedLabelColor: Theme.of(context).colorScheme.secondary,
+              unselectedLabelColor:
+                  Theme.of(context).colorScheme.primary.withOpacity(.5),
               indicatorColor: Theme.of(context).colorScheme.primary,
               dividerColor: Theme.of(context).colorScheme.primary,
               labelStyle: Theme.of(context).textTheme.displayMedium,

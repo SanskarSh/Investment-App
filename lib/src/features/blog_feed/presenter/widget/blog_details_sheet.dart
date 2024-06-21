@@ -152,7 +152,7 @@ class _BlogDetailsSheetState extends State<BlogDetailsSheet> {
                 const SizedBox(height: 20),
                 Card(
                   elevation: 10,
-                  shadowColor: Theme.of(context).colorScheme.secondary,
+                  shadowColor: Theme.of(context).colorScheme.primary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
