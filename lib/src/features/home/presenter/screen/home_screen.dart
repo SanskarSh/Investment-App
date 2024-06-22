@@ -1,132 +1,270 @@
 import 'package:flutter/material.dart';
-import 'package:investment_app/src/features/blog_feed/presenter/screen/blog_screen.dart';
-import 'package:investment_app/src/features/home/presenter/widget/navigation_button.dart';
-import 'package:investment_app/src/features/home/presenter/widget/qr_scanner.dart';
+import 'package:go_router/go_router.dart';
+import 'package:investment_app/src/config/routes/app_route_const.dart';
+import 'package:investment_app/src/features/home/data/source/category_data.dart';
+import 'package:investment_app/src/features/home/presenter/widget/category_grid.dart';
+import 'package:investment_app/src/features/home/presenter/widget/notification_card.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:investment_app/src/features/auth/data/datasource/firebase_auth_datasource.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
-
-  final ValueNotifier<bool> homeSelected = ValueNotifier(false);
-  final ValueNotifier<bool> blogSelected = ValueNotifier(true);
-  final ValueNotifier<bool> profileSelected = ValueNotifier(false);
-  final ValueNotifier<bool> logoutSelected = ValueNotifier(false);
-  final PageController pageController = PageController(initialPage: 1);
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    AuthServices _auth = AuthServices();
-
-    return Scaffold(
-      extendBody: true,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.miniCenterDocked,
-      floatingActionButton: FloatingActionButton(
-        elevation: 0.0,
-        shape: const CircleBorder(),
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            builder: (context) => const QRScannerSheet(),
-          );
-        },
-        child: const Icon(Ionicons.qr_code),
-      ),
-      body: PageView(
-        controller: pageController,
-        physics: const NeverScrollableScrollPhysics(),
-        children: const [
-          Center(
-            child: Text("Home"),
-          ),
-          BlogScreen(),
-          Center(
-            child: Text("Profile"),
-          ),
-        ],
-      ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.only(bottom: 16),
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Theme.of(context).colorScheme.secondary.withOpacity(0.2),
-              spreadRadius: 20,
-              blurRadius: 60,
-              offset: const Offset(0, -1),
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: ListView(
+          children: [
+            const NotificationCard(),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                buildBalanceButton(context),
+                const SizedBox(width: 16),
+                buildPortfolioButton(context),
+              ],
             ),
+            buildRetirementGoalButton(context),
+            const SizedBox(height: 16),
+            buildRecentTransaction(context),
           ],
+        ),
+      ),
+    );
+  }
+
+  Expanded buildPortfolioButton(BuildContext context) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => context.goNamed(RouteNames.investment),
+        child: Card(
+          elevation: 0,
           color: Theme.of(context).colorScheme.onPrimary,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(16),
-            topRight: Radius.circular(16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Text(
+                  "₹1234",
+                  style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                        color: Colors.green,
+                      ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  "Portfolio",
+                  style: Theme.of(context)
+                      .textTheme
+                      .displaySmall
+                      ?.copyWith(color: Colors.green),
+                ),
+              ],
+            ),
           ),
         ),
-        height: 90,
+      ),
+    );
+  }
+
+  Expanded buildBalanceButton(BuildContext context) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => context.goNamed(RouteNames.balance),
+        child: Card(
+          elevation: 0,
+          color: Theme.of(context).colorScheme.onPrimary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Text(
+                  "₹1234",
+                  style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  "Balance",
+                  style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withOpacity(.5),
+                      ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Row buildRetirementGoalButton(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: GestureDetector(
+            onTap: () => context.goNamed(RouteNames.retirement),
+            child: Card(
+              elevation: 0,
+              color: Theme.of(context).colorScheme.onPrimary,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    Text(
+                      "-₹1234000000",
+                      style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      "Retirement Goal",
+                      style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .secondary
+                                .withOpacity(.5),
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column buildRecentTransaction(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 40,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Recent",
+                style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(
+                      isScrollControlled: true,
+                      context: context,
+                      builder: (context) => const AllCategories(),
+                    );
+                  },
+                  child: Icon(
+                    Ionicons.chevron_forward,
+                    size: 24,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: Column(
+            children: List.generate(
+              categoryMapData.length,
+              (index) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 4.0),
+                  child: buildTransaction(
+                    context,
+                    categoryMapData[index]['icon'],
+                    categoryMapData[index]['color'],
+                    categoryMapData[index]['title'],
+                  ),
+                );
+              },
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget buildTransaction(
+      BuildContext context, IconData icon, Color color, String title) {
+    return Container(
+      color: Theme.of(context).colorScheme.onPrimary,
+      margin: const EdgeInsets.only(bottom: 8),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            NavigationButton(
-              pageController: pageController,
-              tooltip: "Home",
-              icon: Ionicons.home_outline,
-              selectedIcon: Ionicons.home,
-              iconSelected: homeSelected,
-              onPressed: () {
-                pageController.jumpToPage(0);
-                homeSelected.value = true;
-                blogSelected.value = false;
-                profileSelected.value = false;
-                logoutSelected.value = false;
-              },
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: color.withOpacity(.1),
+              ),
+              child: Icon(
+                icon,
+                color: color,
+              ),
             ),
-            NavigationButton(
-              pageController: pageController,
-              tooltip: "Blog",
-              icon: Ionicons.compass_outline,
-              selectedIcon: Ionicons.compass,
-              iconSelected: blogSelected,
-              onPressed: () {
-                pageController.jumpToPage(1);
-                homeSelected.value = false;
-                blogSelected.value = true;
-                profileSelected.value = false;
-                logoutSelected.value = false;
-              },
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                  ),
+                  Text(
+                    "18 Sep 2021",
+                    style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                          fontWeight: FontWeight.w200,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(.3),
+                        ),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(),
-            NavigationButton(
-              pageController: pageController,
-              tooltip: "Profile",
-              icon: Ionicons.person_outline,
-              selectedIcon: Ionicons.person,
-              iconSelected: profileSelected,
-              onPressed: () {
-                pageController.jumpToPage(2);
-                homeSelected.value = false;
-                blogSelected.value = false;
-                profileSelected.value = true;
-                logoutSelected.value = false;
-              },
-            ),
-            NavigationButton(
-              pageController: pageController,
-              tooltip: "Logout",
-              icon: Ionicons.log_out_outline,
-              selectedIcon: Ionicons.log_out,
-              iconSelected: logoutSelected,
-              onPressed: () {
-                _auth.signOut();
-                homeSelected.value = false;
-                blogSelected.value = false;
-                profileSelected.value = false;
-                logoutSelected.value = true;
-              },
+            Text(
+              "- ₹500",
+              style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
             ),
           ],
         ),

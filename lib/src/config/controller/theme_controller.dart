@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:investment_app/src/config/service/theme_services.dart';
 
-
 class SettingsController extends ChangeNotifier {
   SettingsController(this._settingService);
 
@@ -18,7 +17,7 @@ class SettingsController extends ChangeNotifier {
 
   Future<void> updateThemeMode(ThemeMode themeMode) async {
     _themeMode = themeMode;
-    await _settingService.updateThemeMode(themeMode);
+    await _settingService.updateThemeMode(_themeMode);
     notifyListeners();
   }
 }

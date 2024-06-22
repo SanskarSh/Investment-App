@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:investment_app/src/features/explore_feed/presenter/widget/quiz.dart';
 import 'package:ionicons/ionicons.dart';
 
-class BlogDetailsSheet extends StatefulWidget {
+class ModuleDetailsSheet extends StatefulWidget {
   final String title;
   final String description;
   final String imageUrl;
 
-  const BlogDetailsSheet({
+  const ModuleDetailsSheet({
     super.key,
     required this.title,
     required this.description,
@@ -15,10 +16,10 @@ class BlogDetailsSheet extends StatefulWidget {
   });
 
   @override
-  State<BlogDetailsSheet> createState() => _BlogDetailsSheetState();
+  State<ModuleDetailsSheet> createState() => _ModuleDetailsSheetState();
 }
 
-class _BlogDetailsSheetState extends State<BlogDetailsSheet> {
+class _ModuleDetailsSheetState extends State<ModuleDetailsSheet> {
   // Notifies the state of the TTS (Text-to-Speech) playback.
   final ValueNotifier<bool> isPlayingNotifier = ValueNotifier<bool>(false);
 
@@ -77,9 +78,9 @@ class _BlogDetailsSheetState extends State<BlogDetailsSheet> {
     flutterTts.setStartHandler(() {
       // When TTS playback starts, set isPlayingNotifier to true.
       isPlayingNotifier.value = true;
-      flutterTts.setVolume(1.0);
-      flutterTts.setSpeechRate(0.4);
-      flutterTts.setPitch(.4);
+      flutterTts.setVolume(.9);
+      flutterTts.setSpeechRate(0.3);
+      flutterTts.setPitch(.5);
     });
 
     flutterTts.setProgressHandler((text, start, end, word) {
@@ -129,50 +130,46 @@ class _BlogDetailsSheetState extends State<BlogDetailsSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: ValueListenableBuilder<double>(
-        valueListenable: scrollPositionNotifier,
-        builder: (context, scrollPosition, child) {
-          return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: Column(
+    return ValueListenableBuilder<double>(
+      valueListenable: scrollPositionNotifier,
+      builder: (context, scrollPosition, child) {
+        return Stack(
+          children: [
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 30),
-                GestureDetector(
-                  onTap: () {
-                    // Close the blog details sheet when tapped.
-                    Navigator.pop(context);
-                  },
-                  child: Icon(
-                    Ionicons.close,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Card(
-                  elevation: 10,
-                  shadowColor: Theme.of(context).colorScheme.secondary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      image: DecorationImage(
-                        image: NetworkImage(widget.imageUrl),
-                        fit: BoxFit.cover,
-                      ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+                  alignment: Alignment.topLeft,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16),
                     ),
-                    height: 200,
-                    width: double.infinity,
+                    image: DecorationImage(
+                      image: NetworkImage(widget.imageUrl),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  height: 250,
+                  width: double.infinity,
+                  child: GestureDetector(
+                    onTap: () {
+                      // Close the blog details sheet when tapped.
+                      Navigator.pop(context);
+                    },
+                    child: Icon(
+                      Ionicons.close,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                 ),
                 Expanded(
                   child: SingleChildScrollView(
                     controller: scrollController,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -184,10 +181,17 @@ class _BlogDetailsSheetState extends State<BlogDetailsSheet> {
                                 .displayLarge
                                 ?.copyWith(
                                   fontWeight: FontWeight.w800,
+                                  fontSize: 40,
                                   color: Theme.of(context).colorScheme.primary,
                                 ),
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 32),
+                          Divider(
+                            color: Theme.of(context).colorScheme.primary,
+                            thickness: 1,
+                            indent: 8,
+                            endIndent: 8,
+                          ),
                           RichText(
                             textAlign: TextAlign.start,
                             text: TextSpan(
@@ -235,19 +239,38 @@ class _BlogDetailsSheetState extends State<BlogDetailsSheet> {
                               ],
                             ),
                           ),
+                          const SizedBox(height: 40),
+                          Quiz(
+                            title:
+                                "nsviisvisnibsrbvbsrbviubrsibvbiusrbbvrbiubsrivb b ub ibrbsui bbi biub birb",
+                            option1: "Hello",
+                            option2: "Hello",
+                            option3: "Hello",
+                            option4: "Hello",
+                            onOptionSelected: (value) {
+                              print('Selected option: $value');
+                            },
+                          ),
+                          const SizedBox(height: 80),
                         ],
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 8),
-                Divider(
+                // const SizedBox(height: 8),
+              ],
+            ),
+            Positioned(
+              bottom: 20,
+              left: 0,
+              right: 0,
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.primary.withOpacity(.1),
-                  thickness: 1,
-                  indent: 8,
-                  endIndent: 8,
+                  borderRadius: BorderRadius.circular(16),
                 ),
-                Row(
+                child: Row(
                   children: [
                     ValueListenableBuilder(
                       valueListenable: isPlayingNotifier,
@@ -300,11 +323,11 @@ class _BlogDetailsSheetState extends State<BlogDetailsSheet> {
                     ),
                   ],
                 ),
-              ],
-            ),
-          );
-        },
-      ),
+              ),
+            )
+          ],
+        );
+      },
     );
   }
 }

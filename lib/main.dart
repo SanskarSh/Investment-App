@@ -4,15 +4,12 @@ import 'package:investment_app/firebase_options.dart';
 import 'package:investment_app/injection_container.dart';
 import 'package:investment_app/src/app.dart';
 import 'package:investment_app/src/config/controller/theme_controller.dart';
-import 'package:investment_app/src/config/service/theme_services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   initializeDependencies();
-  final settingsController = SettingsController(SettingService());
+final settingsController = si<SettingsController>();
   await settingsController.loadSettings();
   runApp(MyApp(controller: settingsController));
 }

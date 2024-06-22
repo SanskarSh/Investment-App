@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class NavigationButton extends StatelessWidget {
@@ -27,10 +26,24 @@ class NavigationButton extends StatelessWidget {
         return IconButton(
           tooltip: tooltip,
           isSelected: isSelected,
-          selectedIcon: Icon(
-            color: Theme.of(context).colorScheme.secondary,
-            size: 30,
-            selectedIcon,
+          selectedIcon: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                color: Theme.of(context).colorScheme.primary,
+                size: 30,
+                selectedIcon,
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 5),
+                height: 5,
+                width: 5,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+              ),
+            ],
           ),
           highlightColor: Colors.transparent,
           icon: Icon(

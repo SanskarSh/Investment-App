@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:investment_app/src/features/blog_feed/presenter/widget/blog_details_sheet.dart';
+import 'package:investment_app/src/features/explore_feed/presenter/widget/module_details_sheet.dart';
 
-class BlogTile extends StatelessWidget {
+class ModuleTile extends StatelessWidget {
   final String title;
   final String description;
   final String date;
   final String imageUrl;
 
-  const BlogTile({
+  const ModuleTile({
     super.key,
     required this.title,
     required this.description,
@@ -19,7 +19,7 @@ class BlogTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        InkWell(
+        GestureDetector(
           onTap: () {
             buildBlogDetailsSheet(context);
           },
@@ -27,9 +27,6 @@ class BlogTile extends StatelessWidget {
             margin: const EdgeInsets.only(top: 8),
             height: 110,
             width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-            ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -44,10 +41,7 @@ class BlogTile extends StatelessWidget {
                             Theme.of(context).textTheme.displayMedium?.copyWith(
                                   height: 1.2,
                                   fontWeight: FontWeight.w600,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .withOpacity(.7),
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -56,6 +50,7 @@ class BlogTile extends StatelessWidget {
                         description,
                         style:
                             Theme.of(context).textTheme.displaySmall?.copyWith(
+                                  fontWeight: FontWeight.w400,
                                   color: Theme.of(context)
                                       .colorScheme
                                       .primary
@@ -69,7 +64,10 @@ class BlogTile extends StatelessWidget {
                         children: [
                           Icon(
                             Icons.calendar_today,
-                            color: Theme.of(context).colorScheme.secondary,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(.5),
                             size: 16,
                           ),
                           Text(
@@ -78,8 +76,10 @@ class BlogTile extends StatelessWidget {
                                 .textTheme
                                 .displaySmall
                                 ?.copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primary
+                                      .withOpacity(.5),
                                 ),
                           ),
                         ],
@@ -118,7 +118,7 @@ class BlogTile extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return BlogDetailsSheet(
+        return ModuleDetailsSheet(
           title: title,
           description: description,
           imageUrl: imageUrl,

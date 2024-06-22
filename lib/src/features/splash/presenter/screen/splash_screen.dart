@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:investment_app/src/features/auth/presenter/screen/onboarding_screen.dart';
-import 'package:investment_app/src/features/home/presenter/screen/home_screen.dart';
+import 'package:investment_app/src/features/entry/presenter/screen/entry_screen.dart';
 import 'package:investment_app/src/features/register/presenter/screen/registration_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -44,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         if (firestoreSnapshot.connectionState ==
                             ConnectionState.done) {
                           if (firestoreSnapshot.data == true) {
-                            return HomeScreen();
+                            return EntryScreen();
                           } else {
                             return const RegistrationScreen();
                           }

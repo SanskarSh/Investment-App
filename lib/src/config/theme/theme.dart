@@ -27,16 +27,16 @@ class MyTheme {
 
   static TextTheme buildTextTheme() {
     return TextTheme(
-      displayLarge: GoogleFonts.playfairDisplay(
+      displayLarge: GoogleFonts.openSans(
         fontSize: 24,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w600,
         letterSpacing: 1.2,
       ),
-      displayMedium: GoogleFonts.playfairDisplay(
+      displayMedium: GoogleFonts.openSans(
         fontSize: 20,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w500,
       ),
-      displaySmall: GoogleFonts.playfairDisplay(
+      displaySmall: GoogleFonts.openSans(
         fontSize: 16,
         fontWeight: FontWeight.bold,
       ),
