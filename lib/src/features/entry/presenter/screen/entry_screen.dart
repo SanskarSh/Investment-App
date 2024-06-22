@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:investment_app/src/features/entry/presenter/widget/todo_task_sheet.dart';
 import 'package:investment_app/src/features/explore_feed/presenter/screen/explore_screen.dart';
 import 'package:investment_app/src/features/entry/presenter/widget/add_blog_sheet.dart';
 import 'package:investment_app/src/features/entry/presenter/widget/chat_screen.dart';
@@ -100,72 +101,95 @@ class EntryScreen extends StatelessWidget {
               },
             ),
             ValueListenableBuilder(
-                valueListenable: homeSelected,
+                valueListenable: leaderBoardSelected,
                 builder: (_, __, ___) {
                   return ValueListenableBuilder(
-                    valueListenable: blogSelected,
-                    builder: (_, __, ___) {
-                      if (homeSelected.value) {
-                        return SpeedDial(
-                          elevation: 0,
-                          animationDuration: const Duration(milliseconds: 400),
-                          animatedIcon: AnimatedIcons.menu_close,
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
-                          activeBackgroundColor:
-                              Theme.of(context).colorScheme.secondary,
-                          children: [
-                            SpeedDialChild(
-                              child: const Icon(
-                                Ionicons.qr_code,
-                                color: Colors.white,
-                              ),
-                              backgroundColor: Colors.green,
-                              label: 'QR Scanner',
-                              onTap: () {
-                                showModalBottomSheet(
-                                  context: context,
-                                  isScrollControlled: true,
-                                  builder: (context) => const QRScannerSheet(),
-                                );
-                              },
-                            ),
-                            SpeedDialChild(
-                              child: const Icon(
-                                Ionicons.create,
-                                color: Colors.white,
-                              ),
-                              backgroundColor: Colors.blue,
-                              label: 'Manual',
-                              onTap: () {
-                                showModalBottomSheet(
-                                  context: context,
-                                  builder: (context) => ManualExpenseSheet(),
-                                );
-                              },
-                            ),
-                          ],
-                        );
-                      } else if (blogSelected.value) {
-                        return FloatingActionButton(
-                          elevation: 0.0,
-                          shape: const CircleBorder(),
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
-                          child: const Icon(Ionicons.add),
-                          onPressed: () {
-                            showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              builder: (context) => const AddBlogSheet(),
-                            );
+                      valueListenable: homeSelected,
+                      builder: (_, __, ___) {
+                        return ValueListenableBuilder(
+                          valueListenable: blogSelected,
+                          builder: (_, __, ___) {
+                            if (homeSelected.value) {
+                              return SpeedDial(
+                                elevation: 0,
+                                animationDuration:
+                                    const Duration(milliseconds: 400),
+                                animatedIcon: AnimatedIcons.menu_close,
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.primary,
+                                activeBackgroundColor:
+                                    Theme.of(context).colorScheme.secondary,
+                                children: [
+                                  SpeedDialChild(
+                                    child: const Icon(
+                                      Ionicons.qr_code,
+                                      color: Colors.white,
+                                    ),
+                                    backgroundColor: Colors.green,
+                                    label: 'QR Scanner',
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        isScrollControlled: true,
+                                        builder: (context) =>
+                                            const QRScannerSheet(),
+                                      );
+                                    },
+                                  ),
+                                  SpeedDialChild(
+                                    child: const Icon(
+                                      Ionicons.create,
+                                      color: Colors.white,
+                                    ),
+                                    backgroundColor: Colors.blue,
+                                    label: 'Manual',
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        builder: (context) =>
+                                            ManualExpenseSheet(),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              );
+                            } else if (blogSelected.value) {
+                              return FloatingActionButton(
+                                elevation: 0.0,
+                                shape: const CircleBorder(),
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.primary,
+                                child: const Icon(Ionicons.add),
+                                onPressed: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    builder: (context) => const AddBlogSheet(),
+                                  );
+                                },
+                              );
+                            } else if (leaderBoardSelected.value) {
+                              return FloatingActionButton(
+                                elevation: 0.0,
+                                shape: const CircleBorder(),
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.primary,
+                                child: const Icon(
+                                  Ionicons.today_outline,
+                                ),
+                                onPressed: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (context) => const TodoTaskSheet(),
+                                  );
+                                },
+                              );
+                            } else {
+                              return const SizedBox();
+                            }
                           },
                         );
-                      } else {
-                        return const SizedBox();
-                      }
-                    },
-                  );
+                      });
                 }),
             NavigationButton(
               pageController: pageController,

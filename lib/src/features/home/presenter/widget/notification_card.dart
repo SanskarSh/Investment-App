@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:swipe_cards/draggable_card.dart';
 import 'package:swipe_cards/swipe_cards.dart';
@@ -21,11 +20,11 @@ class _NotificationCardState extends State<NotificationCard> {
     "Start Investing",
   ];
   final List<Color> _colors = [
-    Colors.red,
-    Colors.blue,
-    Colors.green,
-    Colors.yellow,
-    Colors.orange
+    Colors.red.shade100,
+    Colors.blue.shade100,
+    Colors.green.shade100,
+    Colors.yellow.shade100,
+    Colors.orange.shade100
   ];
 
   @override
@@ -66,7 +65,7 @@ class _NotificationCardState extends State<NotificationCard> {
                   textAlign: TextAlign.center,
                   _swipeItems[index].content.text,
                   style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimary,
+                        color: Theme.of(context).colorScheme.primary.withOpacity(.5),
                         fontWeight: FontWeight.w600,
                       ),
                 ),

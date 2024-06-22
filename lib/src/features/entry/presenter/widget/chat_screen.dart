@@ -1,8 +1,90 @@
 import 'package:flutter/material.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:intl/intl.dart';
 import 'package:ionicons/ionicons.dart';
 
-class ChatScreen extends StatelessWidget {
+class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
+
+  @override
+  _ChatScreenState createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  static const geminiApiKey = "AIzaSyDlQsbxMHUiED9A81NT-s9a62hpJVT0g1k";
+  final List<Message> _messages = [
+    Message(
+      sender: 'Bot 🤖',
+      message: 'How can I help you!',
+      isMe: false,
+      date: DateTime.now(),
+    ),
+  ];
+  final TextEditingController _controller = TextEditingController();
+  final model = GenerativeModel(model: 'gemini-1.5-pro', apiKey: geminiApiKey);
+  bool _isLoading = false;
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      if (_scrollController.position.atEdge &&
+          _scrollController.position.pixels != 0) {}
+    });
+  }
+
+  @override
+  dispose() {
+    _scrollController.dispose();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _sendMessage() async {
+    if (_controller.text.isNotEmpty) {
+      final message = _controller.text;
+      setState(() {
+        _messages.add(
+          Message(
+            sender: 'You',
+            message: message,
+            isMe: true,
+            date: DateTime.now(),
+          ),
+        );
+        _controller.clear();
+        _isLoading = true;
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      });
+
+      final content = [
+        Content.text(
+            "You are a financial expert at WiseVault, a renowned financial services company known for its expertise in investment strategies, wealth management, and financial planning. Your role is to provide detailed, accurate, and insightful answers to all finance-related inquiries. You have extensive knowledge in various financial domains including stock markets, mutual funds, retirement planning, tax strategies, real estate investments, and personal finance management. Give response to the following question in less than 100 words and don't use any markdown elements $message")
+      ];
+      final response = await model.generateContent(content);
+      setState(() {
+        _messages.add(
+          Message(
+            sender: 'Bot 🤖',
+            message: response.text ?? "",
+            isMe: false,
+            date: DateTime.now(),
+          ),
+        );
+        _isLoading = false;
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,44 +104,53 @@ class ChatScreen extends StatelessWidget {
                       Navigator.pop(context);
                     },
                   ),
+                  const SizedBox(width: 10.0),
+                  Text(
+                    '🤖 Chat',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
                 ],
               ),
               Expanded(
-                child: ListView(
-                  reverse: true,
-                  children: const [
-                    SizedBox(height: 40.0),
-                    // MessageBubble(
-                    //   sender: 'Sender 1',
-                    //   message: 'Hello!',
-                    //   isMe: false,
-                    // ),
-                    // MessageBubble(
-                    //   sender: 'Sender 2',
-                    //   message: 'Hi there!',
-                    //   isMe: true,
-                    // ),
-                    // MessageBubble(
-                    //   sender: 'Sender 1',
-                    //   message: 'How are you?',
-                    //   isMe: false,
-                    // ),
-                    MessageBubble(
-                      sender: 'Bot 🤖',
-                      message: 'How can I help you!',
-                      isMe: false,
-                    ),
-                  ],
+                // Step 1: Attach ScrollController to ListView.builder
+                child: ListView.builder(
+                  controller: _scrollController,
+                  itemCount: _messages.length + (_isLoading ? 1 : 0),
+                  itemBuilder: (context, index) {
+                    if (_isLoading && index == _messages.length) {
+                      return MessageBubble(
+                        sender: 'Bot 🤖',
+                        message: '...',
+                        isMe: false,
+                        date: DateFormat('HH:mm').format(DateTime.now()),
+                      );
+                    }
+                    final message = _messages[index];
+                    return MessageBubble(
+                      sender: message.sender,
+                      message: message.message,
+                      isMe: message.isMe,
+                      date: DateFormat('HH:mm').format(message.date),
+                    );
+                  },
                 ),
               ),
+              const SizedBox(height: 20.0),
               Row(
                 children: [
                   Expanded(
                     child: TextField(
+                      autofocus: true,
+                      controller: _controller,
+                      onSubmitted: (_) => _sendMessage(),
                       decoration: InputDecoration(
                         suffixIcon: IconButton(
                           icon: const Icon(Ionicons.send),
-                          onPressed: () {},
+                          onPressed: _sendMessage,
                         ),
                         hintText: 'Type your message...',
                         border: OutlineInputBorder(
@@ -82,12 +173,14 @@ class MessageBubble extends StatelessWidget {
   final String sender;
   final String message;
   final bool isMe;
+  final String date;
 
   const MessageBubble({
     super.key,
     required this.sender,
     required this.message,
     required this.isMe,
+    required this.date,
   });
 
   @override
@@ -98,13 +191,27 @@ class MessageBubble extends StatelessWidget {
         crossAxisAlignment:
             isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          Text(
-            sender,
-            style: const TextStyle(
-              fontSize: 12.0,
-              color: Colors.grey,
+          if (!isMe) ...[
+            Row(
+              children: [
+                Text(
+                  sender,
+                  style: const TextStyle(
+                    fontSize: 12.0,
+                    color: Colors.grey,
+                  ),
+                ),
+                const SizedBox(width: 10.0),
+                Text(
+                  date,
+                  style: const TextStyle(
+                    fontSize: 12.0,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
             ),
-          ),
+          ],
           Material(
             borderRadius: BorderRadius.only(
               topLeft: isMe
@@ -134,8 +241,45 @@ class MessageBubble extends StatelessWidget {
               ),
             ),
           ),
+          if (isMe) ...[
+            const SizedBox(height: 5.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  sender,
+                  style: const TextStyle(
+                    fontSize: 12.0,
+                    color: Colors.grey,
+                  ),
+                ),
+                const SizedBox(width: 10.0),
+                Text(
+                  date,
+                  style: const TextStyle(
+                    fontSize: 12.0,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+          ],
         ],
       ),
     );
   }
+}
+
+class Message {
+  final String sender;
+  final String message;
+  final bool isMe;
+  final DateTime date;
+
+  const Message({
+    required this.sender,
+    required this.message,
+    required this.isMe,
+    required this.date,
+  });
 }

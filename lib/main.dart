@@ -9,7 +9,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   initializeDependencies();
-final settingsController = si<SettingsController>();
+  final settingsController = si<SettingsController>();
   await settingsController.loadSettings();
   runApp(MyApp(controller: settingsController));
 }
