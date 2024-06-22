@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -12,7 +12,7 @@ abstract class FirebaseAuthDataSource {
 class AuthServices implements FirebaseAuthDataSource {
   // instance of Auth & Firestore
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // get current user
   User? get currentUser => _auth.currentUser;
@@ -93,12 +93,12 @@ class AuthServices implements FirebaseAuthDataSource {
       final userCredential = await _auth.signInWithCredential(credential);
 
       // save user info if it doesn't exist
-      _firestore.collection("User").doc(userCredential.user!.uid).set(
-        {
-          "uid": userCredential.user!.uid,
-          "email": userCredential.user!.email,
-        },
-      );
+      // _firestore.collection("User").doc(userCredential.user!.uid).set(
+      //   {
+      //     "uid": userCredential.user!.uid,
+      //     "email": userCredential.user!.email,
+      //   },
+      // );
 
       return userCredential.user;
     } catch (e) {

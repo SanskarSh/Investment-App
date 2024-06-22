@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:investment_app/src/features/blog_feed/presenter/widget/blog_details_sheet.dart';
+import 'package:investment_app/src/features/explore_feed/presenter/widget/module_details_sheet.dart';
 
-class BlogTile extends StatelessWidget {
+class ModuleTile extends StatelessWidget {
   final String title;
   final String description;
   final String date;
   final String imageUrl;
 
-  const BlogTile({
+  const ModuleTile({
     super.key,
     required this.title,
     required this.description,
@@ -19,7 +19,7 @@ class BlogTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        InkWell(
+        GestureDetector(
           onTap: () {
             buildBlogDetailsSheet(context);
           },
@@ -118,7 +118,7 @@ class BlogTile extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return BlogDetailsSheet(
+        return ModuleDetailsSheet(
           title: title,
           description: description,
           imageUrl: imageUrl,

@@ -13,7 +13,7 @@ class AppColors {
   AppColors({required this.context});
 
   // Getters for theme-specific colors
-  Color get surfaceColor => isDarkTheme(context) ? tertiary : surface;
+  Color get surfaceColor => isDarkTheme(context) ? primary : surface;
 
   Color get primaryColor => isDarkTheme(context) ? surface : primary;
 

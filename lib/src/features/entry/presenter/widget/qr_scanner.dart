@@ -56,15 +56,18 @@ class _QRScannerSheetState extends State<QRScannerSheet> {
           ),
           const Spacer(),
           Container(
-            width: 250,
             height: 250,
+            width: 250,
             decoration: BoxDecoration(
-              border: Border.all(color: Theme.of(context).colorScheme.primary),
+              border: Border.all(color: Theme.of(context).colorScheme.secondary, width: 2,),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: QRView(
-              key: qrKey,
-              onQRViewCreated: _onQRViewCreated,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: QRView(
+                key: qrKey,
+                onQRViewCreated: _onQRViewCreated,
+              ),
             ),
           ),
           const Spacer(),

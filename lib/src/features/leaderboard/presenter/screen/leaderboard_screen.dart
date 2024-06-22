@@ -26,66 +26,82 @@ class LeaderBoardScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Container(
-                    alignment: Alignment.topCenter,
-                    padding: const EdgeInsets.only(top: 20),
-                    width: 100,
-                    height: size.height * 0.15,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
+                  const Spacer(),
+                  Expanded(
+                    flex: 2,
+                    child: Container(
+                      alignment: Alignment.topCenter,
+                      padding: const EdgeInsets.only(top: 20),
+                      width: 100,
+                      height: size.height * 0.15,
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        ),
+                        color: Colors.brown[600],
                       ),
-                      color: Colors.brown[600],
-                    ),
-                    child: Text(
-                      "2",
-                      style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.surface,
-                            fontSize: 40,
-                          ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(top: 20),
-                    alignment: Alignment.topCenter,
-                    width: 100,
-                    height: size.height * 0.2,
-                    decoration: BoxDecoration(
-                      color: Colors.teal[900]?.withOpacity(.8),
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
+                      child: Text(
+                        "2",
+                        style:
+                            Theme.of(context).textTheme.displayLarge?.copyWith(
+                                  color: Theme.of(context).colorScheme.surface,
+                                  fontSize: 40,
+                                ),
                       ),
                     ),
-                    child: Text(
-                      "1",
-                      style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.surface,
-                            fontSize: 40,
-                          ),
-                    ),
                   ),
-                  Container(
-                    alignment: Alignment.topCenter,
-                    padding: const EdgeInsets.only(top: 20),
-                    width: 100,
-                    height: size.height * 0.1,
-                    decoration: BoxDecoration(
-                      color: Colors.orange[400],
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
+                  const Spacer(),
+                  Expanded(
+                    flex: 2,
+                    child: Container(
+                      padding: const EdgeInsets.only(top: 20),
+                      alignment: Alignment.topCenter,
+                      width: 100,
+                      height: size.height * 0.2,
+                      decoration: BoxDecoration(
+                        color: Colors.teal[900]?.withOpacity(.8),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        ),
+                      ),
+                      child: Text(
+                        "1",
+                        style:
+                            Theme.of(context).textTheme.displayLarge?.copyWith(
+                                  color: Theme.of(context).colorScheme.surface,
+                                  fontSize: 40,
+                                ),
                       ),
                     ),
-                    child: Text(
-                      "3",
-                      style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.surface,
-                            fontSize: 40,
-                          ),
+                  ),
+                  const Spacer(),
+                  Expanded(
+                    flex: 2,
+                    child: Container(
+                      alignment: Alignment.topCenter,
+                      padding: const EdgeInsets.only(top: 20),
+                      width: 100,
+                      height: size.height * 0.1,
+                      decoration: BoxDecoration(
+                        color: Colors.orange[400],
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        ),
+                      ),
+                      child: Text(
+                        "3",
+                        style:
+                            Theme.of(context).textTheme.displayLarge?.copyWith(
+                                  color: Theme.of(context).colorScheme.surface,
+                                  fontSize: 40,
+                                ),
+                      ),
                     ),
                   ),
+                  const Spacer(),
                 ],
               ),
             ),
@@ -142,6 +158,7 @@ class LeaderBoardScreen extends StatelessWidget {
               ),
         ),
         Expanded(
+          flex: 2,
           child: Container(
             padding: const EdgeInsets.all(20),
             margin: const EdgeInsets.only(left: 20, bottom: 8),
