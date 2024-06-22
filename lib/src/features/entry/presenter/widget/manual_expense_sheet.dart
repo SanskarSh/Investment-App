@@ -20,7 +20,14 @@ class ManualExpenseSheet extends StatelessWidget {
         key: _formKey,
         child: Column(
           children: [
-            const SizedBox(height: 16),
+            Container(
+              height: 5,
+              width: 50,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(5),
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -83,7 +90,7 @@ class ManualExpenseSheet extends StatelessWidget {
                 return null;
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 40),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.secondary,

@@ -1,8 +1,12 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:http/http.dart' as http;
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class AddBlogSheet extends StatefulWidget {
   const AddBlogSheet({super.key});
@@ -16,14 +20,46 @@ class _AddBlogSheetState extends State<AddBlogSheet> {
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
   File? _image;
+  String? imageUrl;
 
-  Future getImage() async {
+  Future<void> getImage() async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (image == null) return;
     final imageTemp = File(image.path);
-    setState(() {
-      this._image = imageTemp;
-    });
+    if (mounted) {
+      setState(() {
+        _image = imageTemp;
+      });
+    }
+  }
+
+  Future<void> _uploadImage() async {
+    if (_image == null) return;
+    final url =
+        Uri.parse("https://api.cloudinary.com/v1_1/dnvgev9ch/image/upload");
+    final request = http.MultipartRequest('POST', url)
+      ..fields['upload_preset'] = 's0lznuyb'
+      ..files.add(await http.MultipartFile.fromPath('file', _image!.path));
+    final response = await request.send();
+    if (response.statusCode == 200) {
+      final responseData = await response.stream.toBytes();
+      final responseString = String.fromCharCodes(responseData);
+      final jsonMap = jsonDecode(responseString);
+      if (mounted) {
+        setState(() {
+          imageUrl = jsonMap['url'];
+        });
+      }
+    } else {
+      if (mounted) {
+        showTopSnackBar(
+          Overlay.of(context),
+          const CustomSnackBar.error(
+            message: 'Failed to upload image',
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -33,17 +69,28 @@ class _AddBlogSheetState extends State<AddBlogSheet> {
     super.dispose();
   }
 
-  void _submitForm() {
+  void _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      // Form is valid, perform your desired action here
-      // For example, you can save the blog data to a database
-      final title = _titleController.text;
-      final content = _contentController.text;
-      // Perform your action here
-      print('Title: $title');
-      print('Content: $content');
-      // Close the bottom sheet
-      Navigator.of(context).pop();
+      if (_image != null) {
+        await _uploadImage();
+      }
+      if (mounted) {
+        if (imageUrl == null) {
+          showTopSnackBar(
+            Overlay.of(context),
+            const CustomSnackBar.error(
+              message: 'Failed to upload image',
+            ),
+          );
+        } else {
+          print(imageUrl);
+          showTopSnackBar(
+            Overlay.of(context),
+            const CustomSnackBar.success(message: 'Blog added successfully'),
+          );
+          Navigator.of(context).pop();
+        }
+      }
     }
   }
 
