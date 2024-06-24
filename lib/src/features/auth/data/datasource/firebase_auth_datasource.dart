@@ -1,67 +1,57 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
+import 'dart:developer';
+import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:investment_app/src/core/constant/string.dart';
+import 'package:investment_app/src/core/service/storage/secure_storage.dart';
 
 abstract class FirebaseAuthDataSource {
   Future<User?> signInWithGoogle();
   Future<UserCredential> signInWithEmailPassword(String email, String password);
-  Future<UserCredential> signUpWithEmailPassword(String email, String password);
   Future<void> signOut();
 }
 
 class AuthServices implements FirebaseAuthDataSource {
-  // instance of Auth & Firestore
+  // Instance of Auth & Secure Storage
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final SecureStorage _secureStorage = SecureStorage();
 
-  // get current user
+  // Get current user
   User? get currentUser => _auth.currentUser;
 
-  // Sign in
+  // Sign in with Email and Password
   @override
   Future<UserCredential> signInWithEmailPassword(
       String email, String password) async {
     try {
-      // sign in user
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+          email: email, password: password);
+      final User? user = userCredential.user;
 
-      return userCredential;
-    } on FirebaseAuthException catch (e) {
-      throw Exception(e.code);
-    }
-  }
+      if (user != null) {
+        final idTokenResult = await user.getIdTokenResult();
+        final accessToken = idTokenResult.token;
 
-  // Sign up
-  @override
-  Future<UserCredential> signUpWithEmailPassword(
-      String email, String password) async {
-    try {
-      // create user
-      final UserCredential userCredential =
-          await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+        final response = await http.post(
+          Uri.parse("${Config.baseUrl}/login/"),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: jsonEncode({"authToken": accessToken}),
+        );
 
-      return userCredential;
-    } on FirebaseAuthException catch (e) {
-      String message = "";
-      switch (e.code) {
-        case 'weak-password':
-          message =
-              'The password is too weak. Please choose a stronger password.';
-          break;
-        case 'email-already-in-use':
-          message = 'The email address is already in use.';
-          break;
-        // Handle other potential error codes
-        default:
-          message = 'An error occurred during registration. Please try again.';
+        if (response.statusCode == 200) {
+          var body = jsonDecode(response.body);
+          var token = body['data']['token'];
+          await _secureStorage.writeSecureData("jwt_token", token);
+        } else {
+          throw Exception("Failed to send post request");
+        }
       }
-      throw Exception(message);
+      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      throw Exception(getErrorString(e.code));
     }
   }
 
@@ -69,60 +59,63 @@ class AuthServices implements FirebaseAuthDataSource {
   @override
   Future<User?> signInWithGoogle() async {
     try {
-      // Start Google sign-in flow
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      if (googleUser == null) {
-        // User canceled sign-in
-        return null;
-      }
-
-      // Get authentication tokens
+      if (googleUser == null) return null;
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
       if (googleAuth.idToken == null || googleAuth.accessToken == null) {
-        // Missing authentication tokens
-        print('Missing Google ID Token or Access Token');
+        log('Missing Google ID Token or Access Token');
         return null;
       }
 
-      // Sign in with Firebase using Google credentials
       final credential = GoogleAuthProvider.credential(
-        idToken: googleAuth.idToken!,
-        accessToken: googleAuth.accessToken!,
-      );
+          idToken: googleAuth.idToken!, accessToken: googleAuth.accessToken!);
       final userCredential = await _auth.signInWithCredential(credential);
+      final User? user = userCredential.user;
+      if (user != null) {
+        final idTokenResult = await user.getIdTokenResult();
+        final accessToken = idTokenResult.token;
 
-      // save user info if it doesn't exist
-      // _firestore.collection("User").doc(userCredential.user!.uid).set(
-      //   {
-      //     "uid": userCredential.user!.uid,
-      //     "email": userCredential.user!.email,
-      //   },
-      // );
+        final response = await http.post(
+          Uri.parse("${Config.baseUrl}/login/"),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: jsonEncode({"authToken": accessToken}),
+        );
 
+        if (response.statusCode == 200) {
+          var body = jsonDecode(response.body);
+          var token = body['data']['token'];
+          await _secureStorage.writeSecureData("jwt_token", token);
+        } else {
+          throw Exception("Failed to send post request");
+        }
+      }
       return userCredential.user;
     } catch (e) {
-      // Error occurred during sign-in
       throw Exception(getErrorString(e.toString()));
     }
+  }
+
+  // Get current user
+  Future<User?> getCurrentUser() async {
+    return _auth.currentUser;
   }
 
   // Sign out
   @override
   Future<void> signOut() async {
     try {
-      // Sign out from Firebase
+      await _secureStorage.deleteSecureData("jwt_token");
       await _auth.signOut();
-
-      // Sign out from Google
       await GoogleSignIn().signOut();
     } catch (e) {
-      // Error occurred during sign-out
       throw Exception(getErrorString(e.toString()));
     }
   }
 
-  // errors
+  // Error handling
   String? getErrorString(String code) {
     switch (code) {
       case 'email-already-in-use':
@@ -140,3 +133,36 @@ class AuthServices implements FirebaseAuthDataSource {
     }
   }
 }
+
+
+
+  // Sign up
+  // @override
+  // Future<UserCredential> signUpWithEmailPassword(
+  //     String email, String password) async {
+  //   try {
+  //     // create user
+  //     final UserCredential userCredential =
+  //         await _auth.createUserWithEmailAndPassword(
+  //       email: email,
+  //       password: password,
+  //     );
+
+  //     return userCredential;
+  //   } on FirebaseAuthException catch (e) {
+  //     String message = "";
+  //     switch (e.code) {
+  //       case 'weak-password':
+  //         message =
+  //             'The password is too weak. Please choose a stronger password.';
+  //         break;
+  //       case 'email-already-in-use':
+  //         message = 'The email address is already in use.';
+  //         break;
+  //       // Handle other potential error codes
+  //       default:
+  //         message = 'An error occurred during registration. Please try again.';
+  //     }
+  //     throw Exception(message);
+  //   }
+  // }

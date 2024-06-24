@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:investment_app/src/features/entry/data/tasks_api_services.dart';
+import 'package:investment_app/src/features/entry/model/task_model.dart';
 
 class TodoTaskSheet extends StatelessWidget {
   const TodoTaskSheet({super.key});
@@ -30,7 +32,7 @@ class TodoTaskSheet extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Blue Whale',
+                'Tasks',
                 style: Theme.of(context).textTheme.displayMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -44,23 +46,32 @@ class TodoTaskSheet extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 32),
-          buildTaskTile(
-            context,
-            "Something to do",
-            "+10 PTS",
-            false,
-          ),
-          buildTaskTile(
-            context,
-            "Something to do",
-            "+5 PTS",
-            true,
-          ),
-          buildTaskTile(
-            context,
-            "Something to do",
-            "+20 PTS",
-            false,
+          FutureBuilder<List<TaskModel>>(
+            future: TasksApiServices().getTasks(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return const Center(child: Text('No modules available.'));
+              } else {
+                final blogTileData = snapshot.data!;
+                return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: blogTileData.length,
+                  itemBuilder: (context, index) {
+                    final task = blogTileData[index];
+                    return buildTaskTile(
+                      context,
+                      task.title,
+                      task.coins.toString(),
+                      task.status,
+                    );
+                  },
+                );
+              }
+            },
           ),
         ],
       ),

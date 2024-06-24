@@ -1,19 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:investment_app/src/features/explore_feed/model/module_model.dart';
 import 'package:investment_app/src/features/explore_feed/presenter/widget/module_details_sheet.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ModuleTile extends StatelessWidget {
-  final String title;
-  final String description;
-  final String date;
-  final String imageUrl;
+  final ModuleModel module;
 
-  const ModuleTile({
-    super.key,
-    required this.title,
-    required this.description,
-    required this.imageUrl,
-    required this.date,
-  });
+  const ModuleTile({super.key, required this.module});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +29,7 @@ class ModuleTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        title,
+                        module.title,
                         maxLines: 2,
                         style:
                             Theme.of(context).textTheme.displayMedium?.copyWith(
@@ -47,7 +41,7 @@ class ModuleTile extends StatelessWidget {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        description,
+                        module.description,
                         style:
                             Theme.of(context).textTheme.displaySmall?.copyWith(
                                   fontWeight: FontWeight.w400,
@@ -71,7 +65,7 @@ class ModuleTile extends StatelessWidget {
                             size: 16,
                           ),
                           Text(
-                            " ● $date",
+                            " ● ${module.coins}",
                             style: Theme.of(context)
                                 .textTheme
                                 .displaySmall
@@ -88,17 +82,39 @@ class ModuleTile extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  height: 80,
-                  width: 80,
-                  margin: const EdgeInsets.only(left: 16),
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: NetworkImage(imageUrl),
-                      fit: BoxFit.cover,
+                    height: 80,
+                    width: 80,
+                    margin: const EdgeInsets.only(left: 16),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: CachedNetworkImage(
+                        imageUrl: module.image,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Shimmer.fromColors(
+                          baseColor: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(.1),
+                          highlightColor: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(.2),
+                          child: Container(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(.1),
+                          ),
+                        ),
+                        errorWidget: (context, url, error) => const Icon(
+                          Icons.error,
+                          color: Colors.red,
+                        ),
+                      ),
+                    )),
               ],
             ),
           ),
@@ -119,9 +135,7 @@ class ModuleTile extends StatelessWidget {
       isScrollControlled: true,
       builder: (BuildContext context) {
         return ModuleDetailsSheet(
-          title: title,
-          description: description,
-          imageUrl: imageUrl,
+          module: module,
         );
       },
     );

@@ -238,6 +238,8 @@ class UserBalanceScreen extends StatelessWidget {
                                 categoryMapData[index]['icon'],
                                 categoryMapData[index]['color'],
                                 categoryMapData[index]['title'],
+                                categoryMapData[index]['amount'],
+                                categoryMapData[index]['date'],
                               ),
                             );
                           },
@@ -255,7 +257,13 @@ class UserBalanceScreen extends StatelessWidget {
   }
 
   Widget buildTransaction(
-      BuildContext context, IconData icon, Color color, String title) {
+    BuildContext context,
+    IconData icon,
+    Color color,
+    String title,
+    String amount,
+    String date,
+  ) {
     return Container(
       color: Theme.of(context).colorScheme.onPrimary,
       margin: const EdgeInsets.only(bottom: 8),
@@ -287,7 +295,7 @@ class UserBalanceScreen extends StatelessWidget {
                         ),
                   ),
                   Text(
-                    "18 Sep 2021",
+                    date,
                     style: Theme.of(context).textTheme.displaySmall?.copyWith(
                           fontWeight: FontWeight.w200,
                           color: Theme.of(context)
@@ -300,7 +308,7 @@ class UserBalanceScreen extends StatelessWidget {
               ),
             ),
             Text(
-              "- ₹500",
+              "- $amount",
               style: Theme.of(context).textTheme.displayMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                     color: Theme.of(context).colorScheme.primary,

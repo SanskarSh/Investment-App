@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
         animation: controller,
         builder: (BuildContext context, Widget? child) {
           return MaterialApp.router(
+            debugShowCheckedModeBanner: false,
             themeMode: controller.themeMode,
             theme: MyTheme.lightTheme,
             darkTheme: MyTheme.darkTheme,

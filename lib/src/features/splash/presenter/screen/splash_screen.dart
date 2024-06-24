@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:investment_app/src/features/auth/presenter/screen/onboarding_screen.dart';
 import 'package:investment_app/src/features/entry/presenter/screen/entry_screen.dart';
-import 'package:investment_app/src/features/register/presenter/screen/registration_screen.dart';
+import 'package:investment_app/src/features/register/view/screen/registration_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

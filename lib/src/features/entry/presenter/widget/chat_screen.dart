@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:intl/intl.dart';
+import 'package:investment_app/src/core/constant/string.dart';
 import 'package:ionicons/ionicons.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -11,7 +12,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  static const geminiApiKey = "AIzaSyDlQsbxMHUiED9A81NT-s9a62hpJVT0g1k";
+  static String geminiApiKey = Config.geminiAPI;
   final List<Message> _messages = [
     Message(
       sender: 'Bot 🤖',
@@ -71,7 +72,7 @@ class _ChatScreenState extends State<ChatScreen> {
         _messages.add(
           Message(
             sender: 'Bot 🤖',
-            message: response.text ?? "",
+            message: response.text?.replaceAll('*', '') ?? "",
             isMe: false,
             date: DateTime.now(),
           ),

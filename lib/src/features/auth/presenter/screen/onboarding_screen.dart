@@ -19,7 +19,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       'color': Colors.teal.shade200.withOpacity(.6),
       'title': 'Investing for everyone',
       'description':
-          'Investing has never been easier. With our app, you can start investing in stocks, ETFs, and options with as little as 1.',
+          'Investing has never been easier. With our app, you can see stock prices and market trends at your finger tips.',
     },
     {
       'color': Colors.orangeAccent.shade200.withOpacity(.6),
@@ -29,15 +29,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     },
     {
       'color': Colors.blue.shade200.withOpacity(.6),
-      'title': 'Manage your portfolio',
+      'title': 'Track your expenses',
       'description':
-          'Keep tabs on your portfolio with our easy-to-use app. You can check your investments and make trades at any time.',
+          'Track your expenses and see where your money is going. We have a budgeting tool to help you save more money.',
     },
     {
       'color': Colors.deepPurple.shade100.withOpacity(.6),
       'title': 'Get started today',
       'description':
-          'Ready to get started? Download the app and start investing today.',
+          'Click login to kickstart your financial literacy journey and start saving today! ',
     },
   ];
 

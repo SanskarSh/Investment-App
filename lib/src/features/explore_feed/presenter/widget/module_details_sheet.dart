@@ -1,18 +1,17 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:investment_app/src/features/explore_feed/model/module_model.dart';
 import 'package:investment_app/src/features/explore_feed/presenter/widget/quiz.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ModuleDetailsSheet extends StatefulWidget {
-  final String title;
-  final String description;
-  final String imageUrl;
+  final ModuleModel module;
 
   const ModuleDetailsSheet({
     super.key,
-    required this.title,
-    required this.description,
-    required this.imageUrl,
+    required this.module,
   });
 
   @override
@@ -139,29 +138,40 @@ class _ModuleDetailsSheetState extends State<ModuleDetailsSheet> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
                   alignment: Alignment.topLeft,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(16),
                       topRight: Radius.circular(16),
-                    ),
-                    image: DecorationImage(
-                      image: NetworkImage(widget.imageUrl),
-                      fit: BoxFit.cover,
                     ),
                   ),
                   height: 250,
                   width: double.infinity,
-                  child: GestureDetector(
-                    onTap: () {
-                      // Close the blog details sheet when tapped.
-                      Navigator.pop(context);
-                    },
-                    child: Icon(
-                      Ionicons.close,
-                      color: Theme.of(context).colorScheme.primary,
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: CachedNetworkImage(
+                      imageUrl: widget.module.image,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Shimmer.fromColors(
+                        baseColor: Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withOpacity(.1),
+                        highlightColor: Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withOpacity(.2),
+                        child: Container(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(.1),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => const Icon(
+                        Icons.error,
+                        color: Colors.red,
+                      ),
                     ),
                   ),
                 ),
@@ -175,7 +185,7 @@ class _ModuleDetailsSheetState extends State<ModuleDetailsSheet> {
                         children: [
                           const SizedBox(height: 40),
                           Text(
-                            widget.title,
+                            widget.module.title,
                             style: Theme.of(context)
                                 .textTheme
                                 .displayLarge
@@ -207,13 +217,13 @@ class _ModuleDetailsSheetState extends State<ModuleDetailsSheet> {
                                   ),
                               children: [
                                 TextSpan(
-                                  text: widget.description
+                                  text: widget.module.content
                                       .substring(0, _currentWordStart),
                                 ),
                                 if (_currentWordStart != null &&
                                     _currentWordEnd != null)
                                   TextSpan(
-                                    text: widget.description.substring(
+                                    text: widget.module.content.substring(
                                       _currentWordStart!,
                                       _currentWordEnd,
                                     ),
@@ -233,23 +243,21 @@ class _ModuleDetailsSheetState extends State<ModuleDetailsSheet> {
                                   ),
                                 if (_currentWordEnd != null)
                                   TextSpan(
-                                    text: widget.description
+                                    text: widget.module.content
                                         .substring(_currentWordEnd!),
                                   ),
                               ],
                             ),
                           ),
                           const SizedBox(height: 40),
-                          Quiz(
-                            title:
-                                "nsviisvisnibsrbvbsrbviubrsibvbiusrbbvrbiubsrivb b ub ibrbsui bbi biub birb",
-                            option1: "Hello",
-                            option2: "Hello",
-                            option3: "Hello",
-                            option4: "Hello",
-                            onOptionSelected: (value) {
-                              print('Selected option: $value');
-                            },
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: widget.module.quiz.length,
+                            itemBuilder: (context, index) => Quiz(
+                              onOptionSelected: (p0) => {},
+                              quizModel: widget.module.quiz[index],
+                            ),
                           ),
                           const SizedBox(height: 80),
                         ],
@@ -259,6 +267,19 @@ class _ModuleDetailsSheetState extends State<ModuleDetailsSheet> {
                 ),
                 // const SizedBox(height: 8),
               ],
+            ),
+            Positioned(
+              top: 40,
+              left: 20,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Icon(
+                  Ionicons.close,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
+              ),
             ),
             Positioned(
               bottom: 20,
@@ -282,7 +303,7 @@ class _ModuleDetailsSheetState extends State<ModuleDetailsSheet> {
                             if (isPlayingNotifier.value) {
                               flutterTts.pause();
                             } else {
-                              flutterTts.speak(widget.description);
+                              flutterTts.speak(widget.module.content);
                             }
                             // Toggle isPlayingNotifier value.
                             isPlayingNotifier.value = !isPlayingNotifier.value;

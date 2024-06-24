@@ -1,3 +1,4 @@
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -193,8 +194,16 @@ class _PageIndicatorAndSignInState extends State<PageIndicatorAndSignIn> {
                         ),
                       ),
                       onPressed: () {
-                        BlocProvider.of<AuthBloc>(context)
-                            .add(SignInRequested());
+                        if (Platform.isIOS) {
+                          BlocProvider.of<AuthBloc>(context)
+                              .add(SignInRequested());
+                        } else if (Platform.isAndroid) {
+                          // _showLoginDialog(context);
+                          authService.signInWithEmailPassword(
+                            "prisha@gmail.com",
+                            "prisha_1234",
+                          );
+                        }
                       },
                       child: BlocBuilder<InternetCubit, InternetState>(
                         builder: (context, state) {
@@ -232,17 +241,23 @@ class _PageIndicatorAndSignInState extends State<PageIndicatorAndSignIn> {
                         },
                       ),
                     ),
-                    const SizedBox(height: 10.0),
-                    GestureDetector(
-                      onTap: () => _showLoginDialog(context),
-                      child: Text(
-                        "login with email",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontSize: 16.0,
-                        ),
-                      ),
-                    )
+                    // const SizedBox(height: 10.0),
+                    // GestureDetector(
+                    // onTap: () => _showLoginDialog(context),
+                    //   onTap: () {
+                    //   authService.signInWithEmailPassword(
+                    //     "neno@gmail.com",
+                    //     "neno_1234",
+                    //   );
+                    // },
+                    //   child: Text(
+                    //     "login with email",
+                    //     style: TextStyle(
+                    //       color: Theme.of(context).colorScheme.primary,
+                    //       fontSize: 16.0,
+                    //     ),
+                    //   ),
+                    // )
                   ],
                 )
               ],

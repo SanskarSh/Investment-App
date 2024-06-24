@@ -7,7 +7,7 @@ class AppColors {
   static const Color surface = Color.fromRGBO(245, 245, 245, 1);
   static const Color primary = Color.fromRGBO(0, 0, 0, 1);
   static const Color onPrimary = Color.fromRGBO(252, 252, 255, 1);
-  static const Color secondary = Color.fromRGBO(250, 100, 110, 1);
+  static const Color secondary = Color(0xff0b54a2);
   static const Color tertiary = Color.fromRGBO(160, 157, 141, 1);
 
   AppColors({required this.context});

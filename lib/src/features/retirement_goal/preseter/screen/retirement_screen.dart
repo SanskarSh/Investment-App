@@ -51,7 +51,7 @@ class RetirementScreen extends StatelessWidget {
                       flex: 3,
                       child: FittedBox(
                         child: Text(
-                          "₹4,00,000",
+                          "₹4,38,012",
                           style: Theme.of(context)
                               .textTheme
                               .displayMedium
@@ -69,7 +69,7 @@ class RetirementScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            "+120 / 12%",
+                            "+₹51601.4 / 12%",
                             style: Theme.of(context)
                                 .textTheme
                                 .displaySmall
@@ -170,7 +170,7 @@ class RetirementScreen extends StatelessWidget {
                                     flex: 3,
                                     child: FittedBox(
                                       child: Text(
-                                        "₹2189.00",
+                                        "₹13,200",
                                         style: Theme.of(context)
                                             .textTheme
                                             .displayMedium
@@ -235,7 +235,7 @@ class RetirementScreen extends StatelessWidget {
                                   flex: 3,
                                   child: FittedBox(
                                     child: Text(
-                                      "₹2189.00",
+                                      "55,000.00",
                                       style: Theme.of(context)
                                           .textTheme
                                           .displayMedium

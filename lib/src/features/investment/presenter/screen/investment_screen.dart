@@ -9,7 +9,7 @@ class InvestmentScreen extends StatelessWidget {
   const InvestmentScreen({super.key});
 
   void updateControllerValue(TextEditingController controller) {
-    double value = double.parse(controller.text) + 1;
+    double value = double.parse((controller.text.substring(1))) + 1;
     controller.text = value.toString();
   }
 
@@ -169,25 +169,29 @@ class InvestmentScreen extends StatelessWidget {
       "Zee Entertainment Enterprises Limited": "ZEEL.NS",
     };
 
-    final TextEditingController cryptoController =
-        TextEditingController(text: (cryptoAmount - cryptoAmount).toString());
+    final TextEditingController cryptoController = TextEditingController(
+        text: "₹${(cryptoAmount - cryptoAmount).toString()}");
+    
     final TextEditingController usStocksController = TextEditingController(
-        text: (usStocksAmount - usStocksAmount).toString());
+        text: "₹${(usStocksAmount - usStocksAmount).toString()}");
+
+
     final TextEditingController indianStocksController = TextEditingController(
-        text: (indianStocksAmount - indianStocksAmount).toString());
+        text: "₹${(indianStocksAmount - indianStocksAmount).toString()}");
     final TextEditingController mutualFundsController = TextEditingController(
-        text: (mutualFundsAmount - mutualFundsAmount).toString());
+        text: "₹${(mutualFundsAmount - mutualFundsAmount).toString()}");
     final TextEditingController goldController =
-        TextEditingController(text: (goldAmount - goldAmount).toString());
+        TextEditingController(text: "₹${(goldAmount - goldAmount).toString()}");
     final TextEditingController corporateBondsController =
         TextEditingController(
-            text: (corporateBondsAmount - corporateBondsAmount).toString());
+            text:
+                "₹${(corporateBondsAmount - corporateBondsAmount).toString()}");
     final TextEditingController fixedDepositsController = TextEditingController(
-        text: (fixedDepositsAmount - fixedDepositsAmount).toString());
-    final TextEditingController epfPpfController =
-        TextEditingController(text: (epfPpfAmount - epfPpfAmount).toString());
+        text: "₹${(fixedDepositsAmount - fixedDepositsAmount).toString()}");
+    final TextEditingController epfPpfController = TextEditingController(
+        text: "₹${(epfPpfAmount - epfPpfAmount).toString()}");
     final TextEditingController realEstateController = TextEditingController(
-        text: (realEstateAmount - realEstateAmount).toString());
+        text: "₹${(realEstateAmount - realEstateAmount).toString()}");
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -204,197 +208,213 @@ class InvestmentScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: SafeArea(
-          child: Form(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                TextFormField(
-                  readOnly: true,
-                  controller: cryptoController,
-                  decoration: InputDecoration(
-                    prefix: Text("${cryptoAmount.toString()} / "),
-                    suffix: _buildSuffixIcon(
-                      context,
-                      () {
+          child: SingleChildScrollView(
+            child: Form(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    height: 200,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      image: const DecorationImage(
+                        image: AssetImage(
+                            'assets/image/Investment_Illustration.png'),
+                        fit: BoxFit.cover,
+                      ),
+                      color: Theme.of(context).colorScheme.surface,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: cryptoController,
+                    decoration: InputDecoration(
+                      prefix: Text("₹${cryptoAmount.toString()} / "),
+                      suffix: _buildSuffixIcon(
+                        context,
+                        () {
+                          // Call the updateControllerValue function
+                          updateControllerValue(cryptoController);
+                        },
+                      ),
+                      border: const OutlineInputBorder(),
+                      labelText: 'Cryptocurrency',
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: usStocksController,
+                          decoration: InputDecoration(
+                            prefix: Text("₹${usStocksAmount.toString()} / "),
+                            suffix: _buildSuffixIcon(context, () {
+                              // Call the updateControllerValue function
+                              updateControllerValue(usStocksController);
+                            }),
+                            border: const OutlineInputBorder(),
+                            labelText: 'US Stocks',
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      GestureDetector(
+                        onTap: () {
+                          showModalBottomSheet(
+                            isScrollControlled: true,
+                            context: context,
+                            builder: (BuildContext context) {
+                              return StockData(
+                                title: 'US Stocks',
+                                stockTickers: usStocks,
+                              );
+                            },
+                          );
+                        },
+                        child: const Icon(Ionicons.chevron_forward),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: indianStocksController,
+                          decoration: InputDecoration(
+                            prefix:
+                                Text("₹${indianStocksAmount.toString()} / "),
+                            suffix: _buildSuffixIcon(context, () {
+                              // Call the updateControllerValue function
+                              updateControllerValue(indianStocksController);
+                            }),
+                            border: const OutlineInputBorder(),
+                            labelText: 'Direct Indian Stocks',
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      GestureDetector(
+                        onTap: () {
+                          showModalBottomSheet(
+                            isScrollControlled: true,
+                            context: context,
+                            builder: (BuildContext context) {
+                              return StockData(
+                                title: 'Direct Indian Stocks',
+                                stockTickers: indianStocks,
+                              );
+                            },
+                          );
+                        },
+                        child: const Icon(Ionicons.chevron_forward),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: mutualFundsController,
+                          decoration: InputDecoration(
+                            prefix: Text("₹${mutualFundsAmount.toString()} / "),
+                            suffix: _buildSuffixIcon(context, () {
+                              // Call the updateControllerValue function
+                              updateControllerValue(mutualFundsController);
+                            }),
+                            border: const OutlineInputBorder(),
+                            labelText: 'Index Mutual Funds',
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      GestureDetector(
+                        onTap: () {
+                          showModalBottomSheet(
+                            isScrollControlled: true,
+                            context: context,
+                            builder: (BuildContext context) {
+                              return StockData(
+                                title: 'Index Mutual Funds',
+                                stockTickers: indexMutualFundsTickers,
+                              );
+                            },
+                          );
+                        },
+                        child: const Icon(Ionicons.chevron_forward),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: goldController,
+                    decoration: InputDecoration(
+                      prefix: Text("₹${goldAmount.toString()} / "),
+                      suffix: _buildSuffixIcon(context, () {
                         // Call the updateControllerValue function
-                        updateControllerValue(cryptoController);
-                      },
+                        updateControllerValue(goldController);
+                      }),
+                      border: const OutlineInputBorder(),
+                      labelText: 'Gold',
                     ),
-                    border: const OutlineInputBorder(),
-                    labelText: 'Cryptocurrency',
                   ),
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        readOnly: true,
-                        controller: usStocksController,
-                        decoration: InputDecoration(
-                          prefix: Text("${usStocksAmount.toString()} / "),
-                          suffix: _buildSuffixIcon(context, () {
-                            // Call the updateControllerValue function
-                            updateControllerValue(usStocksController);
-                          }),
-                          border: const OutlineInputBorder(),
-                          labelText: 'US Stocks',
-                        ),
-                      ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: corporateBondsController,
+                    decoration: InputDecoration(
+                      prefix: Text("₹${corporateBondsAmount.toString()} / "),
+                      suffix: _buildSuffixIcon(context, () {
+                        // Call the updateControllerValue function
+                        updateControllerValue(corporateBondsController);
+                      }),
+                      border: const OutlineInputBorder(),
+                      labelText: 'Corporate Bonds',
                     ),
-                    const SizedBox(width: 10),
-                    GestureDetector(
-                      onTap: () {
-                        showModalBottomSheet(
-                          isScrollControlled: true,
-                          context: context,
-                          builder: (BuildContext context) {
-                            return StockData(
-                              title: 'US Stocks',
-                              stockTickers: usStocks,
-                            );
-                          },
-                        );
-                      },
-                      child: const Icon(Ionicons.chevron_forward),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        readOnly: true,
-                        controller: indianStocksController,
-                        decoration: InputDecoration(
-                          prefix: Text("${indianStocksAmount.toString()} / "),
-                          suffix: _buildSuffixIcon(context, () {
-                            // Call the updateControllerValue function
-                            updateControllerValue(indianStocksController);
-                          }),
-                          border: const OutlineInputBorder(),
-                          labelText: 'Direct Indian Stocks',
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    GestureDetector(
-                      onTap: () {
-                        showModalBottomSheet(
-                          isScrollControlled: true,
-                          context: context,
-                          builder: (BuildContext context) {
-                            return StockData(
-                              title: 'Direct Indian Stocks',
-                              stockTickers: indianStocks,
-                            );
-                          },
-                        );
-                      },
-                      child: const Icon(Ionicons.chevron_forward),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        readOnly: true,
-                        controller: mutualFundsController,
-                        decoration: InputDecoration(
-                          prefix: Text("${mutualFundsAmount.toString()} / "),
-                          suffix: _buildSuffixIcon(context, () {
-                            // Call the updateControllerValue function
-                            updateControllerValue(mutualFundsController);
-                          }),
-                          border: const OutlineInputBorder(),
-                          labelText: 'Index Mutual Funds',
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    GestureDetector(
-                      onTap: () {
-                        showModalBottomSheet(
-                          isScrollControlled: true,
-                          context: context,
-                          builder: (BuildContext context) {
-                            return StockData(
-                              title: 'Index Mutual Funds',
-                              stockTickers: indexMutualFundsTickers,
-                            );
-                          },
-                        );
-                      },
-                      child: const Icon(Ionicons.chevron_forward),
-                    ),
-                  ],
-                ),
-                TextFormField(
-                  readOnly: true,
-                  controller: goldController,
-                  decoration: InputDecoration(
-                    prefix: Text("${goldAmount.toString()} / "),
-                    suffix: _buildSuffixIcon(context, () {
-                      // Call the updateControllerValue function
-                      updateControllerValue(goldController);
-                    }),
-                    border: const OutlineInputBorder(),
-                    labelText: 'Gold',
                   ),
-                ),
-                TextFormField(
-                  readOnly: true,
-                  controller: corporateBondsController,
-                  decoration: InputDecoration(
-                    prefix: Text("${corporateBondsAmount.toString()} / "),
-                    suffix: _buildSuffixIcon(context, () {
-                      // Call the updateControllerValue function
-                      updateControllerValue(corporateBondsController);
-                    }),
-                    border: const OutlineInputBorder(),
-                    labelText: 'Corporate Bonds',
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: fixedDepositsController,
+                    decoration: InputDecoration(
+                      prefix: Text("₹${fixedDepositsAmount.toString()} / "),
+                      suffix: _buildSuffixIcon(context, () {
+                        // Call the updateControllerValue function
+                        updateControllerValue(fixedDepositsController);
+                      }),
+                      border: const OutlineInputBorder(),
+                      labelText: 'Fixed Deposits',
+                    ),
                   ),
-                ),
-                TextFormField(
-                  readOnly: true,
-                  controller: fixedDepositsController,
-                  decoration: InputDecoration(
-                    prefix: Text("${fixedDepositsAmount.toString()} / "),
-                    suffix: _buildSuffixIcon(context, () {
-                      // Call the updateControllerValue function
-                      updateControllerValue(fixedDepositsController);
-                    }),
-                    border: const OutlineInputBorder(),
-                    labelText: 'Fixed Deposits',
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: epfPpfController,
+                    decoration: InputDecoration(
+                      prefix: Text("₹${epfPpfAmount.toString()} / "),
+                      suffix: _buildSuffixIcon(context, () {
+                        // Call the updateControllerValue function
+                        updateControllerValue(epfPpfController);
+                      }),
+                      border: const OutlineInputBorder(),
+                      labelText: 'EPF/PPF',
+                    ),
                   ),
-                ),
-                TextFormField(
-                  readOnly: true,
-                  controller: epfPpfController,
-                  decoration: InputDecoration(
-                    prefix: Text("${epfPpfAmount.toString()} / "),
-                    suffix: _buildSuffixIcon(context, () {
-                      // Call the updateControllerValue function
-                      updateControllerValue(epfPpfController);
-                    }),
-                    border: const OutlineInputBorder(),
-                    labelText: 'EPF/PPF',
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: realEstateController,
+                    decoration: InputDecoration(
+                      prefix: Text("₹${realEstateAmount.toString()} / "),
+                      suffix: _buildSuffixIcon(context, () {
+                        // Call the updateControllerValue function
+                        updateControllerValue(realEstateController);
+                      }),
+                      border: const OutlineInputBorder(),
+                      labelText: 'Real Estate',
+                    ),
                   ),
-                ),
-                TextFormField(
-                  readOnly: true,
-                  controller: realEstateController,
-                  decoration: InputDecoration(
-                    prefix: Text("${realEstateAmount.toString()} / "),
-                    suffix: _buildSuffixIcon(context, () {
-                      // Call the updateControllerValue function
-                      updateControllerValue(realEstateController);
-                    }),
-                    border: const OutlineInputBorder(),
-                    labelText: 'Real Estate',
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

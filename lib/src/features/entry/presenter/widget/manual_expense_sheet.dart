@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:investment_app/src/features/home/data/source/category_data.dart';
 
 class ManualExpenseSheet extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -76,18 +77,33 @@ class ManualExpenseSheet extends StatelessWidget {
               },
             ),
             const SizedBox(height: 16),
-            TextFormField(
+            DropdownButtonFormField<Map<String, dynamic>>(
               decoration: InputDecoration(
-                labelText: 'Description',
+                labelText: 'Category',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
+              items: categoryMapData.map((category) {
+                return DropdownMenuItem<Map<String, dynamic>>(
+                  value: category,
+                  child: Row(
+                    children: [
+                      Icon(category['icon'], color: category['color']),
+                      const SizedBox(width: 8),
+                      Text(category['title']),
+                    ],
+                  ),
+                );
+              }).toList(),
               validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a description';
+                if (value == null) {
+                  return 'Please select a category';
                 }
                 return null;
+              },
+              onChanged: (value) {
+                // Handle category selection here
               },
             ),
             const SizedBox(height: 40),

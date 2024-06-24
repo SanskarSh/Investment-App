@@ -1,24 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:investment_app/src/features/explore_feed/model/module_model.dart';
 
 class Quiz extends StatefulWidget {
+  final Function(int) onOptionSelected;
+  final QuizModel quizModel;
+
   const Quiz({
     super.key,
     required this.onOptionSelected,
-    required this.title,
-    required this.option1,
-    required this.option2,
-    required this.option3,
-    required this.option4,
+    required this.quizModel,
   });
-
-  final Function(int) onOptionSelected;
-
-  final String title;
-
-  final String option1;
-  final String option2;
-  final String option3;
-  final String option4;
 
   @override
   State<Quiz> createState() => _QuizState();
@@ -30,7 +21,7 @@ class _QuizState extends State<Quiz> {
   @override
   void didUpdateWidget(covariant Quiz oldWidget) {
     super.didUpdateWidget(oldWidget);
-    selectedOption = 0;
+    selectedOption;
   }
 
   @override
@@ -53,97 +44,48 @@ class _QuizState extends State<Quiz> {
               ),
             ),
             child: Text(
-              widget.title,
+              widget.quizModel.question,
               style: Theme.of(context).textTheme.displayMedium,
               textAlign: TextAlign.center,
             ),
           ),
           const SizedBox(height: 20),
-          Card(
-            elevation: 0,
-            color: Theme.of(context).colorScheme.onPrimary,
-            child: RadioListTile(
-              activeColor: Theme.of(context).colorScheme.secondary,
-              selectedTileColor: Theme.of(context).colorScheme.secondary,
-              tileColor: Theme.of(context).colorScheme.onPrimary,
-              title: Text(
-                widget.option1,
-                style: Theme.of(context).textTheme.displaySmall,
-              ),
-              value: 1,
-              groupValue: selectedOption,
-              onChanged: (value) {
-                setState(() {
-                  selectedOption = value;
-                  widget.onOptionSelected(value!);
-                });
-              },
-            ),
-          ),
-          Card(
-            elevation: 0,
-            color: Theme.of(context).colorScheme.onPrimary,
-            child: RadioListTile(
-              activeColor: Theme.of(context).colorScheme.secondary,
-              selectedTileColor: Theme.of(context).colorScheme.secondary,
-              tileColor: Theme.of(context).colorScheme.onPrimary,
-              title: Text(
-                widget.option2,
-                style: Theme.of(context).textTheme.displaySmall,
-              ),
-              value: 2,
-              groupValue: selectedOption,
-              onChanged: (value) {
-                setState(() {
-                  selectedOption = value;
-                  widget.onOptionSelected(value!);
-                });
-              },
-            ),
-          ),
-          Card(
-            elevation: 0,
-            color: Theme.of(context).colorScheme.onPrimary,
-            child: RadioListTile(
-              activeColor: Theme.of(context).colorScheme.secondary,
-              selectedTileColor: Theme.of(context).colorScheme.secondary,
-              tileColor: Theme.of(context).colorScheme.onPrimary,
-              title: Text(
-                widget.option3,
-                style: Theme.of(context).textTheme.displaySmall,
-              ),
-              value: 3,
-              groupValue: selectedOption,
-              onChanged: (value) {
-                setState(() {
-                  selectedOption = value;
-                  widget.onOptionSelected(value!);
-                });
-              },
-            ),
-          ),
-          Card(
-            elevation: 0,
-            color: Theme.of(context).colorScheme.onPrimary,
-            child: RadioListTile(
-              activeColor: Theme.of(context).colorScheme.secondary,
-              selectedTileColor: Theme.of(context).colorScheme.secondary,
-              tileColor: Theme.of(context).colorScheme.onPrimary,
-              title: Text(
-                widget.option4,
-                style: Theme.of(context).textTheme.displaySmall,
-              ),
-              value: 4,
-              groupValue: selectedOption,
-              onChanged: (value) {
-                setState(() {
-                  selectedOption = value;
-                  widget.onOptionSelected(value!);
-                });
-              },
-            ),
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: widget.quizModel.options.length,
+            itemBuilder: (context, index) {
+              return buildOption(
+                context,
+                widget.quizModel.options,
+                index,
+              );
+            },
           ),
         ],
+      ),
+    );
+  }
+
+  Card buildOption(BuildContext context, List<String> option, int value) {
+    return Card(
+      elevation: 0,
+      color: Theme.of(context).colorScheme.onPrimary,
+      child: RadioListTile(
+        activeColor: Theme.of(context).colorScheme.secondary,
+        selectedTileColor: Theme.of(context).colorScheme.secondary,
+        tileColor: Theme.of(context).colorScheme.onPrimary,
+        title: Text(
+          option[value],
+          style: Theme.of(context).textTheme.displaySmall,
+        ),
+        value: value,
+        groupValue: selectedOption,
+        onChanged: (value) {
+          setState(() {
+            selectedOption = value;
+            widget.onOptionSelected(value!);
+          });
+        },
       ),
     );
   }
